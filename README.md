@@ -6,7 +6,7 @@ O projeto integra as disciplinas de Projeto, Design e Engenharia de Processos, P
 
 ## Situação atual
 
-O projeto está na etapa de descoberta e organização do escopo. Nesta fase estão sendo consolidados os requisitos, os perfis de acesso, os limites do MVP e os critérios acadêmicos que orientarão a implementação.
+O escopo inicial foi consolidado e a fundação técnica está em desenvolvimento. O repositório já possui os projetos-base dos primeiros microsserviços, a infraestrutura local com Docker Compose e a estrutura inicial do aplicativo mobile.
 
 ## Perfis previstos
 
@@ -27,4 +27,11 @@ O projeto está na etapa de descoberta e organização do escopo. Nesta fase est
 - [Visão e escopo do MVP](docs/visao-e-escopo.md)
 - [Backlog inicial](docs/backlog-inicial.md)
 - [Arquitetura inicial](docs/arquitetura-inicial.md)
+
+## Estrutura do repositório
+
+- `backend`: API Gateway e microsserviços Spring Boot.
+- `mobile`: aplicativo React Native com Expo.
+- `docs`: escopo, arquitetura e planejamento das entregas.
+- `compose.yaml`: infraestrutura e execução integrada dos serviços.
 
