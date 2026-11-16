@@ -17,12 +17,14 @@ O backlog está organizado por etapas para que o desenvolvimento e as entregas a
 
 ## Etapa 2 — Fundação técnica
 
-- [ ] Definir a divisão inicial dos microsserviços.
-- [ ] Definir versões de Java, Spring Boot e Spring Cloud.
-- [ ] Estruturar os projetos backend e mobile.
+- [x] Definir a divisão inicial dos microsserviços.
+- [x] Definir Java 21 como versão-alvo do backend.
+- [x] Utilizar Spring Boot 4.1.2 e Spring Cloud 2025.1.4.
+- [x] Estruturar os projetos iniciais do backend.
+- [ ] Estruturar o projeto mobile.
 - [ ] Configurar migrações de banco de dados.
-- [ ] Preparar configuração externa e centralizada.
-- [ ] Preparar execução local com Docker Compose.
+- [x] Preparar a base da configuração externa e centralizada.
+- [x] Preparar a infraestrutura local inicial com Docker Compose.
 
 ## Etapa 3 — Acesso e perfis
 

@@ -26,4 +26,5 @@ O projeto está na etapa de descoberta e organização do escopo. Nesta fase est
 
 - [Visão e escopo do MVP](docs/visao-e-escopo.md)
 - [Backlog inicial](docs/backlog-inicial.md)
+- [Arquitetura inicial](docs/arquitetura-inicial.md)
 

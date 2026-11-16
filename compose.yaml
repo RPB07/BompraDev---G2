@@ -1,0 +1,126 @@
+name: bompradev
+
+services:
+  consul:
+    image: hashicorp/consul:1.21
+    command: agent -dev -client=0.0.0.0
+    ports:
+      - "${CONSUL_HTTP_PORT:-8500}:8500"
+    healthcheck:
+      test: ["CMD", "consul", "members"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  auth-db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: bompradev_auth
+      POSTGRES_USER: ${POSTGRES_USER:-bompradev}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be defined}
+    ports:
+      - "5433:5432"
+    volumes:
+      - auth-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  catalog-db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: bompradev_catalog
+      POSTGRES_USER: ${POSTGRES_USER:-bompradev}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be defined}
+    ports:
+      - "5434:5432"
+    volumes:
+      - catalog-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  scheduling-db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: bompradev_scheduling
+      POSTGRES_USER: ${POSTGRES_USER:-bompradev}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be defined}
+    ports:
+      - "5435:5432"
+    volumes:
+      - scheduling-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  auth-service:
+    build: ./backend/auth-service
+    environment:
+      SERVER_PORT: 8081
+      DATABASE_URL: jdbc:postgresql://auth-db:5432/bompradev_auth
+      DATABASE_USER: ${POSTGRES_USER:-bompradev}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be defined}
+      CONSUL_HOST: consul
+    ports:
+      - "8081:8081"
+    depends_on:
+      auth-db:
+        condition: service_healthy
+      consul:
+        condition: service_healthy
+
+  catalog-service:
+    build: ./backend/catalog-service
+    environment:
+      SERVER_PORT: 8082
+      DATABASE_URL: jdbc:postgresql://catalog-db:5432/bompradev_catalog
+      DATABASE_USER: ${POSTGRES_USER:-bompradev}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be defined}
+      CONSUL_HOST: consul
+    ports:
+      - "8082:8082"
+    depends_on:
+      catalog-db:
+        condition: service_healthy
+      consul:
+        condition: service_healthy
+
+  scheduling-service:
+    build: ./backend/scheduling-service
+    environment:
+      SERVER_PORT: 8083
+      DATABASE_URL: jdbc:postgresql://scheduling-db:5432/bompradev_scheduling
+      DATABASE_USER: ${POSTGRES_USER:-bompradev}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be defined}
+      CONSUL_HOST: consul
+    ports:
+      - "8083:8083"
+    depends_on:
+      scheduling-db:
+        condition: service_healthy
+      consul:
+        condition: service_healthy
+
+  api-gateway:
+    build: ./backend/api-gateway
+    environment:
+      SERVER_PORT: 8080
+      CONSUL_HOST: consul
+    ports:
+      - "8080:8080"
+    depends_on:
+      consul:
+        condition: service_healthy
+
+volumes:
+  auth-data:
+  catalog-data:
+  scheduling-data:
+
