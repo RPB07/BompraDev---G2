@@ -22,7 +22,7 @@ O backlog está organizado por etapas para que o desenvolvimento e as entregas a
 - [x] Utilizar Spring Boot 4.1.2 e Spring Cloud 2025.1.4.
 - [x] Estruturar os projetos iniciais do backend.
 - [x] Estruturar o projeto mobile com navegação, tema e cliente HTTP.
-- [ ] Configurar migrações de banco de dados.
+- [x] Configurar migrações de banco de dados.
 - [x] Preparar a base da configuração externa e centralizada.
 - [x] Preparar a infraestrutura local inicial com Docker Compose.
 

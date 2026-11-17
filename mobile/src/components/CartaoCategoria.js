@@ -2,11 +2,11 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { colors, spacing, typography } from '../theme';
 
-export function CategoryCard({ title, description }) {
+export function CartaoCategoria({ titulo, descricao }) {
   return (
     <View accessible accessibilityRole="summary" style={styles.card}>
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.description}>{description}</Text>
+      <Text style={styles.title}>{titulo}</Text>
+      <Text style={styles.description}>{descricao}</Text>
     </View>
   );
 }

@@ -2,29 +2,29 @@ import { Link } from 'expo-router';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { CategoryCard } from '../components/CategoryCard';
+import { CartaoCategoria } from '../components/CartaoCategoria';
 import { colors, spacing, typography } from '../theme';
 
-const categories = [
+const categorias = [
   {
-    title: 'BOMPRADROP',
-    description: 'Notícias, dicas e conteúdos rápidos sobre tecnologia.',
+    titulo: 'BOMPRADROP',
+    descricao: 'Notícias, dicas e conteúdos rápidos sobre tecnologia.',
   },
   {
-    title: 'BOMPRALAB',
-    description: 'Guias, tutoriais e materiais para aprofundar conhecimentos.',
+    titulo: 'BOMPRALAB',
+    descricao: 'Guias, tutoriais e materiais para aprofundar conhecimentos.',
   },
   {
-    title: 'BOMPRAVOZ',
-    description: 'Enquetes e pesquisas para participação da comunidade.',
+    titulo: 'BOMPRAVOZ',
+    descricao: 'Enquetes e pesquisas para participação da comunidade.',
   },
   {
-    title: 'BOMPRAPRÊMIO',
-    description: 'Experiências promocionais e solicitações de resgate.',
+    titulo: 'BOMPRAPRÊMIO',
+    descricao: 'Experiências promocionais e solicitações de resgate.',
   },
   {
-    title: 'SERVIÇOS',
-    description: 'Serviços de tecnologia oferecidos por providers.',
+    titulo: 'SERVIÇOS',
+    descricao: 'Serviços de tecnologia oferecidos por providers.',
   },
 ];
 
@@ -50,11 +50,11 @@ export default function HomeScreen() {
 
         <View style={styles.categories}>
           <Text style={styles.sectionTitle}>Explore a plataforma</Text>
-          {categories.map((category) => (
-            <CategoryCard
-              key={category.title}
-              title={category.title}
-              description={category.description}
+          {categorias.map((categoria) => (
+            <CartaoCategoria
+              key={categoria.titulo}
+              titulo={categoria.titulo}
+              descricao={categoria.descricao}
             />
           ))}
         </View>

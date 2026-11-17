@@ -55,3 +55,13 @@ Cada aplicação terá seu próprio Dockerfile. O ambiente completo será orques
 
 Os módulos de conteúdo, enquetes, itens promocionais, observabilidade e demais serviços de apoio serão incluídos em etapas posteriores. A criação de um novo microsserviço dependerá de uma responsabilidade e de dados próprios claramente identificados.
 
+## Persistência inicial
+
+Cada microsserviço mantém seu próprio banco PostgreSQL e controla a evolução do esquema com migrações versionadas pelo Flyway:
+
+- `auth-service`: usuários e seus perfis `USER`, `PROVIDER` e `ADMIN`;
+- `catalog-service`: categorias e serviços publicados pelos providers;
+- `scheduling-service`: disponibilidades e agendamentos que aguardam aprovação do provider.
+
+Os identificadores pertencentes a outros microsserviços são armazenados sem chaves estrangeiras entre bancos. A consistência entre esses dados será tratada pelas regras de negócio e pelas integrações entre os serviços.
+

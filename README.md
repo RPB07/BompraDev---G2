@@ -6,7 +6,7 @@ O projeto integra as disciplinas de Projeto, Design e Engenharia de Processos, P
 
 ## Situação atual
 
-O escopo inicial foi consolidado e a fundação técnica está em desenvolvimento. O repositório já possui os projetos-base dos primeiros microsserviços, a infraestrutura local com Docker Compose e a estrutura inicial do aplicativo mobile.
+O escopo inicial e a fundação técnica foram consolidados. O repositório possui os projetos-base dos primeiros microsserviços, migrações versionadas dos bancos, infraestrutura local com Docker Compose e a estrutura inicial do aplicativo mobile.
 
 ## Perfis previstos
 
