@@ -1,8 +1,9 @@
-import { Link } from 'expo-router';
+import { router } from 'expo-router';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CartaoCategoria } from '../components/CartaoCategoria';
+import { useAuth } from '../context/AuthContext';
 import { colors, spacing, typography } from '../theme';
 
 const categorias = [
@@ -29,6 +30,7 @@ const categorias = [
 ];
 
 export default function HomeScreen() {
+  const { usuario } = useAuth();
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.content}>
@@ -37,15 +39,14 @@ export default function HomeScreen() {
           <Text style={styles.subtitle}>
             Conteúdo, comunidade e serviços para quem vive tecnologia.
           </Text>
-          <Link href="/login" asChild>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Acessar conta"
-              style={({ pressed }) => [styles.accessButton, pressed && styles.pressed]}
-            >
-              <Text style={styles.accessButtonText}>Acessar conta</Text>
-            </Pressable>
-          </Link>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={usuario ? 'Meu perfil' : 'Acessar conta'}
+            onPress={() => router.push(usuario ? '/perfil' : '/login')}
+            style={({ pressed }) => [styles.accessButton, pressed && styles.pressed]}
+          >
+            <Text style={styles.accessButtonText}>{usuario ? 'Meu perfil' : 'Acessar conta'}</Text>
+          </Pressable>
         </View>
 
         <View style={styles.categories}>

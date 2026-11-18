@@ -117,6 +117,7 @@ services:
     environment:
       SERVER_PORT: 8080
       CONSUL_HOST: consul
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET must be defined}
       SPRING_CLOUD_CONSUL_CONFIG_WATCH_WAIT_TIME: 5
     ports:
       - "8080:8080"

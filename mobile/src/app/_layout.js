@@ -1,11 +1,14 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { MD3LightTheme, PaperProvider } from 'react-native-paper';
 
+import { AuthProvider } from '../context/AuthContext';
 import { colors } from '../theme';
 
 export default function RootLayout() {
   return (
-    <>
+    <PaperProvider theme={{ ...MD3LightTheme, colors: { ...MD3LightTheme.colors, primary: colors.primary, secondary: colors.accent } }}>
+      <AuthProvider>
       <StatusBar style="light" />
       <Stack
         screenOptions={{
@@ -17,8 +20,12 @@ export default function RootLayout() {
       >
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="login" options={{ title: 'Acessar conta' }} />
+        <Stack.Screen name="cadastro" options={{ title: 'Criar conta' }} />
+        <Stack.Screen name="perfil" options={{ title: 'Meu perfil' }} />
+        <Stack.Screen name="perfil/[id]" options={{ title: 'Perfil público' }} />
       </Stack>
-    </>
+      </AuthProvider>
+    </PaperProvider>
   );
 }
 

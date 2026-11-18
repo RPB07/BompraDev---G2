@@ -1,14 +1,14 @@
 export const colors = {
-  primary: '#17104B',
-  primaryMuted: '#D9D5F5',
-  accent: '#32D3E3',
+  primary: '#5A2917',
+  primaryMuted: '#FFE7D3',
+  accent: '#E6A14B',
   onPrimary: '#FFFFFF',
-  onAccent: '#10122E',
-  background: '#F6F7FB',
+  onAccent: '#32180E',
+  background: '#FBF6F1',
   surface: '#FFFFFF',
-  text: '#191A2A',
-  textMuted: '#5C6075',
-  border: '#DADDEA',
+  text: '#332018',
+  textMuted: '#755C50',
+  border: '#E5D3C3',
   danger: '#B42318',
 };
 

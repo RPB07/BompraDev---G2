@@ -34,14 +34,17 @@ O backlog está organizado por etapas para que o desenvolvimento e as entregas a
 - [x] Implementar cadastro inicial de `USER` e `PROVIDER` no auth-service.
 - [x] Implementar login e emissão de JWT no auth-service.
 - [x] Proteger a consulta da própria conta no auth-service com JWT.
-- [ ] Integrar cadastro e login ao gateway e ao aplicativo.
-- [ ] Aplicar autorização para `USER`, `PROVIDER` e `ADMIN`.
-- [ ] Implementar consulta e atualização do próprio perfil.
-- [ ] Criar as telas mobile de acesso e perfil.
+- [x] Integrar cadastro e login ao gateway e ao aplicativo.
+- [x] Validar os perfis `USER`, `PROVIDER` e `ADMIN` no acesso autenticado; permitir apenas a `USER` ativar o perfil de prestador.
+- [x] Implementar consulta e atualização do próprio perfil e consulta pública sem exposição de e-mail.
+- [x] Criar as telas mobile de acesso e perfil.
+
+As permissões específicas das funcionalidades de `PROVIDER` e `ADMIN` serão aplicadas quando esses recursos forem implementados.
 
 ## Etapa 4 — Serviços
 
 - [ ] Implementar cadastro e manutenção de serviços pelo provider.
+- [ ] Restringir as operações de serviços e moderação aos perfis autorizados.
 - [ ] Implementar moderação administrativa.
 - [ ] Implementar catálogo e detalhes para users.
 - [ ] Implementar disponibilidade de horários pelo provider.

@@ -6,7 +6,9 @@ O projeto integra as disciplinas de Projeto, Design e Engenharia de Processos, P
 
 ## Situação atual
 
-O escopo inicial e a fundação técnica foram consolidados. O repositório possui os projetos-base dos primeiros microsserviços, migrações versionadas dos bancos, infraestrutura local com Docker Compose e a estrutura inicial do aplicativo mobile.
+O escopo inicial e a fundação técnica foram consolidados. A etapa de acesso e perfis inclui cadastro, login, perfil público e edição do próprio perfil, integrados ao auth-service pelo API Gateway. As seções de conteúdo e serviços da tela inicial ainda são ilustrativas e serão desenvolvidas nas próximas etapas.
+
+Para executar o projeto, consulte as orientações do [backend](backend/README.md) e do [aplicativo](mobile/README.md).
 
 ## Perfis previstos
 

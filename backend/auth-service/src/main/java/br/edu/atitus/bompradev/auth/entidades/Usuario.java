@@ -34,6 +34,12 @@ public class Usuario {
     @Column(nullable = false)
     private boolean ativo = true;
 
+    @Column(length = 1000)
+    private String biografia;
+
+    @Column(length = 500)
+    private String portfolio;
+
     protected Usuario() {
     }
 
@@ -50,4 +56,16 @@ public class Usuario {
     public String getSenhaHash() { return senhaHash; }
     public TipoUsuario getTipo() { return tipo; }
     public boolean isAtivo() { return ativo; }
+    public String getBiografia() { return biografia; }
+    public String getPortfolio() { return portfolio; }
+
+    public void atualizarPerfil(String nome, String biografia, String portfolio) {
+        this.nome = nome;
+        this.biografia = biografia;
+        this.portfolio = portfolio;
+    }
+
+    public void tornarProvider() {
+        this.tipo = TipoUsuario.PROVIDER;
+    }
 }

@@ -40,7 +40,7 @@ Antes da execução, substitua `POSTGRES_PASSWORD` e `JWT_SECRET` no arquivo `.e
 
 ## Cadastro inicial
 
-Com o `auth-service` e seu banco em execução, envie `POST /auth/signup` para a porta 8081:
+Com o gateway, o `auth-service`, o Consul e o banco em execução, envie `POST /auth/signup` ao gateway na porta 8080:
 
 ```json
 {
@@ -55,7 +55,7 @@ O campo `provider` seleciona o perfil `PROVIDER`; ausente ou `false`, cria um `U
 
 ## Login
 
-Envie `POST /auth/signin` ao `auth-service` na porta 8081 com o e-mail e a senha cadastrados:
+Envie `POST /auth/signin` ao gateway na porta 8080 com o e-mail e a senha cadastrados:
 
 ```json
 {
@@ -64,7 +64,26 @@ Envie `POST /auth/signin` ao `auth-service` na porta 8081 com o e-mail e a senha
 }
 ```
 
-A resposta contém `token`, `tipoToken`, `expiraEmSegundos` e os dados básicos de `usuario`. O token expira após uma hora. Para consultar a própria conta em `GET /auth/me`, envie o cabeçalho `Authorization: Bearer <token>`. Credenciais incorretas, usuários inativos e tokens inválidos são recusados. O gateway, a autorização por perfil e as telas de cadastro e login ainda serão integrados nas próximas entregas; por enquanto, use as rotas diretamente no serviço.
+A resposta contém `token`, `tipoToken`, `expiraEmSegundos` e os dados de `usuario`. O token expira após uma hora. Credenciais incorretas, usuários inativos e tokens inválidos são recusados.
 
-O login segue o exemplo `auth-api` do professor Luciano: usa `AuthenticationManager`, `UserDetailsService`, BCrypt e JJWT 0.13.0. A rota `/auth/me` foi inspirada no material do professor Augusto; no BompraDev, ela retorna diretamente os dados do usuário, sem o objeto `user` que envolve a resposta no exemplo dele. A integração da validação JJWT com o Spring Security na rota protegida adapta os exemplos à estrutura já existente do projeto; a chave é fornecida por variável de ambiente e não fica no código.
+## Perfil e gateway
+
+Os seguintes caminhos usam o gateway na porta 8080. Nas rotas protegidas, envie `Authorization: Bearer <token>`:
+
+- `GET /auth/me`: consulta a própria conta autenticada.
+- `PUT /auth/me`: atualiza o nome, a biografia e o portfólio da própria conta. Exemplo: `{"nome":"Ana","biografia":"Desenvolvedora","portfolio":"https://exemplo.com"}`.
+- `POST /auth/me/provider`: permite a uma conta `USER` ativar o perfil `PROVIDER` e devolve um novo token.
+- `GET /perfis/{id}`: consulta pública do nome, tipo, biografia e portfólio, sem retornar o e-mail.
+
+O gateway consulta o Consul para localizar o auth-service e valida o JWT nas rotas protegidas. O auth-service também valida o token. As regras específicas de acesso a serviços e à moderação serão aplicadas junto com esses recursos.
+
+Para iniciar apenas a infraestrutura necessária à etapa de acesso e perfis, execute na raiz:
+
+```powershell
+docker compose up -d --build auth-service api-gateway
+```
+
+A inicialização pode demorar enquanto as imagens são compiladas e os serviços registrados. A migração `V2` acrescenta os campos de perfil ao banco de autenticação existente sem substituir a migração anterior.
+
+O login segue o exemplo `auth-api` do professor Luciano: usa `AuthenticationManager`, `UserDetailsService`, BCrypt e JJWT 0.13.0. As rotas e o filtro do gateway foram adaptados do exemplo `gateway-api` dele. A rota `/auth/me` foi inspirada no material do professor Augusto; no BompraDev, ela retorna diretamente os dados do usuário, sem o objeto `user` que envolve a resposta no exemplo dele. As regras de perfil e ativação de prestador são adaptações ao escopo do BompraDev. A chave é fornecida por variável de ambiente e não fica no código.
 

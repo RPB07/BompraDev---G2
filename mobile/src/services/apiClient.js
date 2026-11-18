@@ -15,7 +15,9 @@ export async function requisicaoApi(path, options = {}) {
   });
 
   if (!response.ok) {
-    throw new Error(`Falha na requisição: HTTP ${response.status}`);
+    const erro = new Error(`Falha na requisição: HTTP ${response.status}`);
+    erro.status = response.status;
+    throw erro;
   }
 
   if (response.status === 204) {
