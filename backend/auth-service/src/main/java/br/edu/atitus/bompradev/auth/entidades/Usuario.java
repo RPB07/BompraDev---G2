@@ -49,4 +49,5 @@ public class Usuario {
     public String getEmail() { return email; }
     public String getSenhaHash() { return senhaHash; }
     public TipoUsuario getTipo() { return tipo; }
+    public boolean isAtivo() { return ativo; }
 }

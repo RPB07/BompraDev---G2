@@ -30,11 +30,13 @@ Cada projeto possui seu próprio Maven Wrapper. No Windows, por exemplo:
 Para validar todo o ambiente declarado, execute na raiz do repositório:
 
 ```powershell
-Copy-Item .env.example .env
+if (-not (Test-Path .env)) { Copy-Item .env.example .env }
 docker compose config
 ```
 
-Antes da execução, substitua o valor de `POSTGRES_PASSWORD` no arquivo `.env`. Esse arquivo não deve ser versionado.
+Antes da execução, substitua `POSTGRES_PASSWORD` e `JWT_SECRET` no arquivo `.env`. A chave JWT deve ser aleatória, ter pelo menos 32 bytes e não deve ser compartilhada nem versionada. É possível gerá-la com `openssl rand -base64 32` e inserir o resultado em `JWT_SECRET`. Se o banco já existir em um volume, sua senha continua sendo a definida na criação do volume: alterar `POSTGRES_PASSWORD` no `.env` não altera automaticamente a senha armazenada no PostgreSQL. O arquivo `.env` não deve ser versionado.
+
+`AUTH_DB_PORT` altera somente a porta do PostgreSQL de autenticação no computador local. `AUTH_DATA_VOLUME` escolhe o volume Docker desse banco; o padrão mantém o volume existente. Não substitua ou apague um volume com dados sem primeiro preservar uma cópia e confirmar seu conteúdo.
 
 ## Cadastro inicial
 
@@ -49,5 +51,18 @@ Com o `auth-service` e seu banco em execução, envie `POST /auth/signup` para a
 }
 ```
 
-O campo `provider` seleciona o perfil `PROVIDER`; ausente ou `false`, cria um `USER`. `ADMIN` não pode ser escolhido no cadastro público. A senha precisa ter pelo menos 8 caracteres e no máximo 72 bytes em UTF-8; ela é armazenada como hash BCrypt e não aparece na resposta. E-mails são únicos, independentemente de maiúsculas ou minúsculas. O login, JWT e o cadastro pelo aplicativo serão implementados posteriormente; esta rota ainda é acessada diretamente no serviço, não pelo gateway.
+O campo `provider` seleciona o perfil `PROVIDER`; ausente ou `false`, cria um `USER`. `ADMIN` não pode ser escolhido no cadastro público. A senha precisa ter pelo menos 8 caracteres e no máximo 72 bytes em UTF-8; ela é armazenada como hash BCrypt e não aparece na resposta. E-mails são únicos, independentemente de maiúsculas ou minúsculas.
+
+## Login
+
+Envie `POST /auth/signin` ao `auth-service` na porta 8081 com o e-mail e a senha cadastrados:
+
+```json
+{
+  "email": "ana@example.com",
+  "senha": "senha123"
+}
+```
+
+A resposta contém `token`, `tipoToken`, `expiraEmSegundos` e os dados básicos de `usuario`. O token expira após uma hora. Para consultar a própria conta em `GET /auth/me`, envie o cabeçalho `Authorization: Bearer <token>`. Credenciais incorretas, usuários inativos e tokens inválidos são recusados. O gateway, a autorização por perfil e as telas de cadastro e login ainda serão integrados nas próximas entregas; por enquanto, use as rotas diretamente no serviço.
 

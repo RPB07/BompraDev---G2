@@ -19,8 +19,11 @@ public class ConfigSecurity {
                 .authorizeHttpRequests(auth -> auth
                         .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/signup").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/signin").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/auth/me").authenticated()
                         .requestMatchers("/actuator/health", "/actuator/info").permitAll()
                         .anyRequest().denyAll())
+                .oauth2ResourceServer(oauth -> oauth.jwt(jwt -> {}))
                 .build();
     }
 

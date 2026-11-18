@@ -32,8 +32,9 @@ O backlog está organizado por etapas para que o desenvolvimento e as entregas a
 ## Etapa 3 — Acesso e perfis
 
 - [x] Implementar cadastro inicial de `USER` e `PROVIDER` no auth-service.
-- [ ] Implementar cadastro e login.
-- [ ] Implementar autenticação stateless com JWT.
+- [x] Implementar login e emissão de JWT no auth-service.
+- [x] Proteger a consulta da própria conta no auth-service com JWT.
+- [ ] Integrar cadastro e login ao gateway e ao aplicativo.
 - [ ] Aplicar autorização para `USER`, `PROVIDER` e `ADMIN`.
 - [ ] Implementar consulta e atualização do próprio perfil.
 - [ ] Criar as telas mobile de acesso e perfil.
