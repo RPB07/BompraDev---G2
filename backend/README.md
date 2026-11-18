@@ -87,3 +87,7 @@ A inicialização pode demorar enquanto as imagens são compiladas e os serviço
 
 O login segue o exemplo `auth-api` do professor Luciano: usa `AuthenticationManager`, `UserDetailsService`, BCrypt e JJWT 0.13.0. As rotas e o filtro do gateway foram adaptados do exemplo `gateway-api` dele. A rota `/auth/me` foi inspirada no material do professor Augusto; no BompraDev, ela retorna diretamente os dados do usuário, sem o objeto `user` que envolve a resposta no exemplo dele. As regras de perfil e ativação de prestador são adaptações ao escopo do BompraDev. A chave é fornecida por variável de ambiente e não fica no código.
 
+## Início do catálogo
+
+O `catalog-service` possui o mapeamento JPA das tabelas existentes de categorias e serviços e seus repositórios, seguindo a organização de entidades e `JpaRepository` apresentada no `product-api` do professor Luciano. Ainda não existem endpoints nem telas de catálogo: as regras de publicação, os campos obrigatórios e a gestão das categorias dependem de definição. A estrutura existente no banco não confirma, por si só, essas regras.
+

@@ -43,6 +43,7 @@ As permissões específicas das funcionalidades de `PROVIDER` e `ADMIN` serão a
 
 ## Etapa 4 — Serviços
 
+- [x] Mapear categorias e serviços no catálogo de acordo com a estrutura de banco existente.
 - [ ] Implementar cadastro e manutenção de serviços pelo provider.
 - [ ] Restringir as operações de serviços e moderação aos perfis autorizados.
 - [ ] Implementar moderação administrativa.
