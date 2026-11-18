@@ -36,3 +36,18 @@ docker compose config
 
 Antes da execução, substitua o valor de `POSTGRES_PASSWORD` no arquivo `.env`. Esse arquivo não deve ser versionado.
 
+## Cadastro inicial
+
+Com o `auth-service` e seu banco em execução, envie `POST /auth/signup` para a porta 8081:
+
+```json
+{
+  "nome": "Ana Exemplo",
+  "email": "ana@example.com",
+  "senha": "senha123",
+  "provider": true
+}
+```
+
+O campo `provider` seleciona o perfil `PROVIDER`; ausente ou `false`, cria um `USER`. `ADMIN` não pode ser escolhido no cadastro público. A senha precisa ter pelo menos 8 caracteres e no máximo 72 bytes em UTF-8; ela é armazenada como hash BCrypt e não aparece na resposta. E-mails são únicos, independentemente de maiúsculas ou minúsculas. O login, JWT e o cadastro pelo aplicativo serão implementados posteriormente; esta rota ainda é acessada diretamente no serviço, não pelo gateway.
+

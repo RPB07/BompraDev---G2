@@ -11,7 +11,10 @@ O backlog está organizado por etapas para que o desenvolvimento e as entregas a
 - [x] Definir que a confirmação depende da aprovação do provider.
 - [ ] Definir os demais estados e regras dos agendamentos.
 - [ ] Definir regras de disponibilidade e conflito de horários.
-- [ ] Definir os dados obrigatórios de cada perfil.
+- [x] Definir os dados obrigatórios de cada perfil: nome, e-mail e senha.
+- [x] Definir o cadastro e a ativação do perfil `PROVIDER` sem aprovação administrativa.
+- [x] Definir perfil público com biografia e portfólio.
+- [x] Definir pagamento simulado e as regras informadas de cancelamento e remarcação.
 - [ ] Definir critérios de moderação dos serviços.
 - [ ] Elaborar os fluxos principais e o modelo conceitual de dados.
 
@@ -28,6 +31,7 @@ O backlog está organizado por etapas para que o desenvolvimento e as entregas a
 
 ## Etapa 3 — Acesso e perfis
 
+- [x] Implementar cadastro inicial de `USER` e `PROVIDER` no auth-service.
 - [ ] Implementar cadastro e login.
 - [ ] Implementar autenticação stateless com JWT.
 - [ ] Aplicar autorização para `USER`, `PROVIDER` e `ADMIN`.
@@ -43,6 +47,7 @@ O backlog está organizado por etapas para que o desenvolvimento e as entregas a
 - [ ] Implementar contratação por agendamento pelo user.
 - [ ] Implementar aprovação ou recusa do agendamento pelo provider.
 - [ ] Implementar histórico de agendamentos para user e provider.
+- [ ] Implementar pagamento simulado e as regras de cancelamento e remarcação.
 - [ ] Implementar upload controlado de imagens.
 - [ ] Construir as telas mobile do módulo.
 

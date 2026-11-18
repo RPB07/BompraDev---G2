@@ -10,6 +10,10 @@ Desenvolver uma aplicação mobile integrada a um backend baseado em microsservi
 
 ## Perfis e responsabilidades
 
+O cadastro exige nome, e-mail e senha. Uma opção de marcação permite declarar que a pessoa oferece serviços: quando selecionada, a conta recebe o perfil `PROVIDER`; caso contrário, recebe `USER`. Não há necessidade de comprovação nem aprovação administrativa para se tornar provider. Um user também poderá ativar o perfil provider posteriormente na própria conta. A atribuição de `ADMIN` não faz parte do cadastro público.
+
+Todos os usuários terão perfil público com biografia editável e espaço para portfólio. Os dados de acesso não serão públicos.
+
 ### USER
 
 - Criar conta e autenticar-se.
@@ -50,6 +54,10 @@ O provider não poderá administrar serviços pertencentes a outro provider nem 
 - Cadastro e consulta de serviços.
 - Disponibilidade de horários e contratação de serviços por agendamento.
 - Aprovação do agendamento pelo provider responsável pelo serviço.
+- Pagamento simulado dos serviços, sem movimentação de dinheiro.
+- Cancelamento pelo contratante com menos de duas horas de antecedência: cobrança simulada de 50% do valor do serviço.
+- Cancelamento pelo provider: o contratante poderá remarcar para horário disponível sem novo pagamento.
+- Horários solicitados ficam indisponíveis na agenda para evitar reservas simultâneas.
 - Histórico de agendamentos para users e providers.
 - Upload controlado de imagens.
 - Histórico das interações relevantes.
@@ -73,15 +81,12 @@ O provider não poderá administrar serviços pertencentes a outro provider nem 
 Os pontos abaixo não serão implementados até que suas regras sejam validadas:
 
 - Estados adicionais e transições posteriores à aprovação do agendamento.
-- Regras de reagendamento e cancelamento.
+- Demais condições de reagendamento e cancelamento, incluindo o tratamento do valor pago em outras situações.
 - Duração dos serviços e formação dos horários disponíveis.
 - Tratamento de conflitos e concorrência na reserva de horários.
 - Avaliações de providers e serviços.
 - Comunicação entre user e provider.
-- Dados adicionais exigidos no cadastro de provider.
 - Critério de aprovação ou moderação de serviços.
-- Tecnologia e versão definitivas do backend.
-- Serviços que formarão a primeira divisão da arquitetura.
 
 ## Restrições acadêmicas
 
