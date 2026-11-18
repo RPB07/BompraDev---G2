@@ -6,7 +6,7 @@ O projeto integra as disciplinas de Projeto, Design e Engenharia de Processos, P
 
 ## Situação atual
 
-O escopo inicial e a fundação técnica foram consolidados. A etapa de acesso e perfis inclui cadastro, login, perfil público e edição do próprio perfil, integrados ao auth-service pelo API Gateway. As seções de conteúdo e serviços da tela inicial ainda são ilustrativas e serão desenvolvidas nas próximas etapas.
+O escopo inicial e a fundação técnica foram consolidados. Há cadastro, login e perfis integrados ao auth-service pelo API Gateway. A etapa de serviços começou com catálogo, filtro, detalhes e publicação e edição pelo provider. Agendamentos e moderação ainda serão implementados; as seções de conteúdo da tela inicial são ilustrativas.
 
 Para executar o projeto, consulte as orientações do [backend](backend/README.md) e do [aplicativo](mobile/README.md).
 

@@ -80,14 +80,31 @@ O gateway consulta o Consul para localizar o auth-service e valida o JWT nas rot
 Para iniciar apenas a infraestrutura necessária à etapa de acesso e perfis, execute na raiz:
 
 ```powershell
-docker compose up -d --build auth-service api-gateway
+docker compose up -d --build auth-service catalog-service api-gateway
 ```
 
 A inicialização pode demorar enquanto as imagens são compiladas e os serviços registrados. A migração `V2` acrescenta os campos de perfil ao banco de autenticação existente sem substituir a migração anterior.
 
 O login segue o exemplo `auth-api` do professor Luciano: usa `AuthenticationManager`, `UserDetailsService`, BCrypt e JJWT 0.13.0. As rotas e o filtro do gateway foram adaptados do exemplo `gateway-api` dele. A rota `/auth/me` foi inspirada no material do professor Augusto; no BompraDev, ela retorna diretamente os dados do usuário, sem o objeto `user` que envolve a resposta no exemplo dele. As regras de perfil e ativação de prestador são adaptações ao escopo do BompraDev. A chave é fornecida por variável de ambiente e não fica no código.
 
-## Início do catálogo
+## Catálogo de serviços
 
-O `catalog-service` possui o mapeamento JPA das tabelas existentes de categorias e serviços e seus repositórios, seguindo a organização de entidades e `JpaRepository` apresentada no `product-api` do professor Luciano. Ainda não existem endpoints nem telas de catálogo: as regras de publicação, os campos obrigatórios e a gestão das categorias dependem de definição. A estrutura existente no banco não confirma, por si só, essas regras.
+O `catalog-service` mantém categorias e serviços em seu próprio banco. A migração `V2` cria as categorias iniciais de tecnologia. Serviços criados por `PROVIDER` ficam disponíveis imediatamente, usando o estado interno `APROVADO`; esse nome de estado não significa aprovação prévia por um administrador. Título, descrição, preço, duração em minutos e categoria são obrigatórios.
+
+Pelo gateway na porta 8080:
+
+- `GET /catalogo/categorias`: categorias ativas.
+- `GET /catalogo/servicos`: lista pública; aceita filtro opcional `?categoriaId=<id>`.
+- `GET /catalogo/servicos/{id}`: detalhes públicos.
+- `GET /catalogo/meus-servicos`: serviços do provider autenticado.
+- `POST /catalogo/servicos`: publica um serviço do provider autenticado.
+- `PUT /catalogo/servicos/{id}`: altera um serviço disponível pertencente ao provider autenticado.
+
+Nas rotas protegidas, envie `Authorization: Bearer <token>`. Exemplo de corpo para cadastro e edição:
+
+```json
+{"categoriaId":"<id-da-categoria>","titulo":"Serviço","descricao":"Descrição do serviço","valor":120.00,"duracaoMinutos":60}
+```
+
+O gateway e o catálogo validam o JWT, e o catálogo verifica o perfil e a propriedade do serviço. A moderação administrativa, a inativação e os agendamentos ainda não estão implementados. A organização de entidades, repositórios, serviços e controllers adapta os exemplos do `product-api` do professor Luciano; as regras de publicação e propriedade pertencem ao BompraDev.
 

@@ -62,7 +62,7 @@ export function AuthProvider({ children }) {
     catch (erro) { if (erro.status === 401) await sair(); throw erro; }
   }
 
-  return <AuthContext.Provider value={{ usuario, inicializando, entrar, cadastrar, sair, atualizarPerfil, tornarProvider }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ usuario, token, inicializando, entrar, cadastrar, sair, atualizarPerfil, tornarProvider }}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {

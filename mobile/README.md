@@ -1,6 +1,6 @@
 # Aplicativo mobile
 
-Aplicativo do BompraDev desenvolvido com React Native, Expo SDK 58 e JavaScript. Nesta etapa é possível testar cadastro, login, edição de perfil e ativação como prestador. As outras seções da tela inicial ainda não possuem funcionalidades.
+Aplicativo do BompraDev desenvolvido com React Native, Expo SDK 58 e JavaScript. É possível testar acesso e perfil, consultar serviços e, como provider, publicar ou editar os próprios serviços. Agendamentos e as seções de conteúdo ainda não possuem funcionalidades.
 
 ## Requisitos
 
@@ -33,5 +33,5 @@ npm.cmd run start
 - `src/storage`: adapters de armazenamento local seguro.
 - `src/theme`: cores, espaçamentos e tipografia.
 
-Inicie antes o backend conforme o respectivo README. Com o Expo em execução, utilize o QR Code no Expo Go ou abra o emulador. Para uma visualização no navegador do computador, execute `npm.cmd run web`. A sessão é armazenada no SecureStore em dispositivos nativos e na sessão do navegador na versão web. As telas de acesso e campos reutilizáveis foram adaptados dos exemplos React Native do professor Augusto.
+Inicie antes o backend conforme o respectivo README, incluindo o `catalog-service`. Com o Expo em execução, utilize o QR Code no Expo Go ou abra o emulador. Para uma visualização no navegador do computador, execute `npm.cmd run web`. A sessão é armazenada no SecureStore em dispositivos nativos e na sessão do navegador na versão web. As telas de acesso, campos reutilizáveis e estrutura de listagem e detalhes foram adaptados dos exemplos React Native do professor Augusto.
 

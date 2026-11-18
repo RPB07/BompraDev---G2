@@ -52,11 +52,18 @@ export default function HomeScreen() {
         <View style={styles.categories}>
           <Text style={styles.sectionTitle}>Explore a plataforma</Text>
           {categorias.map((categoria) => (
+            categoria.titulo === 'SERVIÇOS' ? (
+              <Pressable key={categoria.titulo} accessibilityRole="button" accessibilityLabel="Ver serviços"
+                onPress={() => router.push('/servicos')}>
+                <CartaoCategoria titulo={categoria.titulo} descricao={categoria.descricao} />
+              </Pressable>
+            ) : (
             <CartaoCategoria
               key={categoria.titulo}
               titulo={categoria.titulo}
               descricao={categoria.descricao}
             />
+            )
           ))}
         </View>
       </ScrollView>

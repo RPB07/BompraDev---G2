@@ -16,6 +16,7 @@ public class GatewayConfig {
     RouteLocator rotas(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route("auth-service", rota -> rota.path("/auth/**", "/perfis/**").uri("lb://auth-service"))
+                .route("catalog-service", rota -> rota.path("/catalogo/**").uri("lb://catalog-service"))
                 .build();
     }
 

@@ -52,6 +52,9 @@ O provider não poderá administrar serviços pertencentes a outro provider nem 
 - Enquetes BOMPRAVOZ.
 - Catálogo e solicitações do BOMPRAPRÊMIO, sem operação financeira.
 - Cadastro e consulta de serviços.
+- Publicação imediata pelo provider, sem aprovação prévia; a moderação administrativa será detalhada posteriormente.
+- Título, descrição, preço, duração e categoria obrigatórios no cadastro do serviço.
+- Categorias iniciais predefinidas no catálogo: Desenvolvimento web, Desenvolvimento mobile, Desenvolvimento de software, Infraestrutura e redes, Suporte técnico, Design e experiência do usuário e Consultoria em tecnologia.
 - Disponibilidade de horários e contratação de serviços por agendamento.
 - Aprovação do agendamento pelo provider responsável pelo serviço.
 - Pagamento simulado dos serviços, sem movimentação de dinheiro.
@@ -82,11 +85,11 @@ Os pontos abaixo não serão implementados até que suas regras sejam validadas:
 
 - Estados adicionais e transições posteriores à aprovação do agendamento.
 - Demais condições de reagendamento e cancelamento, incluindo o tratamento do valor pago em outras situações.
-- Duração dos serviços e formação dos horários disponíveis.
+- Formação dos horários disponíveis a partir da duração dos serviços.
 - Tratamento de conflitos e concorrência na reserva de horários.
 - Avaliações de providers e serviços.
 - Comunicação entre user e provider.
-- Critério de aprovação ou moderação de serviços.
+- Critérios e ações de moderação administrativa de serviços.
 
 ## Restrições acadêmicas
 

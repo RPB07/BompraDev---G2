@@ -15,7 +15,8 @@ O backlog está organizado por etapas para que o desenvolvimento e as entregas a
 - [x] Definir o cadastro e a ativação do perfil `PROVIDER` sem aprovação administrativa.
 - [x] Definir perfil público com biografia e portfólio.
 - [x] Definir pagamento simulado e as regras informadas de cancelamento e remarcação.
-- [ ] Definir critérios de moderação dos serviços.
+- [x] Definir que serviços publicados aparecem imediatamente.
+- [ ] Definir critérios e ações de moderação administrativa dos serviços.
 - [ ] Elaborar os fluxos principais e o modelo conceitual de dados.
 
 ## Etapa 2 — Fundação técnica
@@ -44,17 +45,18 @@ As permissões específicas das funcionalidades de `PROVIDER` e `ADMIN` serão a
 ## Etapa 4 — Serviços
 
 - [x] Mapear categorias e serviços no catálogo de acordo com a estrutura de banco existente.
-- [ ] Implementar cadastro e manutenção de serviços pelo provider.
+- [x] Implementar cadastro e edição dos próprios serviços pelo provider.
 - [ ] Restringir as operações de serviços e moderação aos perfis autorizados.
 - [ ] Implementar moderação administrativa.
-- [ ] Implementar catálogo e detalhes para users.
+- [x] Implementar catálogo, filtro por categoria e detalhes de serviços.
 - [ ] Implementar disponibilidade de horários pelo provider.
 - [ ] Implementar contratação por agendamento pelo user.
 - [ ] Implementar aprovação ou recusa do agendamento pelo provider.
 - [ ] Implementar histórico de agendamentos para user e provider.
 - [ ] Implementar pagamento simulado e as regras de cancelamento e remarcação.
 - [ ] Implementar upload controlado de imagens.
-- [ ] Construir as telas mobile do módulo.
+- [x] Construir telas mobile para consulta, cadastro e edição de serviços.
+- [ ] Construir as demais telas mobile do módulo.
 
 ## Etapa 5 — Conteúdo e participação
 

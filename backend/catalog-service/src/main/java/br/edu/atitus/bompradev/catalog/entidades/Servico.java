@@ -51,6 +51,22 @@ public class Servico {
     protected Servico() {
     }
 
+    public Servico(UUID providerId, Categoria categoria, String titulo, String descricao,
+                   BigDecimal valor, Integer duracaoMinutos) {
+        this.providerId = providerId;
+        this.situacao = SituacaoServico.APROVADO;
+        atualizar(categoria, titulo, descricao, valor, duracaoMinutos);
+    }
+
+    public void atualizar(Categoria categoria, String titulo, String descricao,
+                          BigDecimal valor, Integer duracaoMinutos) {
+        this.categoria = categoria;
+        this.titulo = titulo;
+        this.descricao = descricao;
+        this.valor = valor;
+        this.duracaoMinutos = duracaoMinutos;
+    }
+
     public UUID getId() { return id; }
     public UUID getProviderId() { return providerId; }
     public Categoria getCategoria() { return categoria; }

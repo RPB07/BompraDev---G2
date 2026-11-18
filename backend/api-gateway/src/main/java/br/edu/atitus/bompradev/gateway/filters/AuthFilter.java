@@ -35,7 +35,9 @@ public class AuthFilter implements GlobalFilter, Ordered {
         String caminho = request.getURI().getPath();
         boolean publica = HttpMethod.OPTIONS.equals(request.getMethod())
                 || (HttpMethod.POST.equals(request.getMethod()) && (caminho.equals("/auth/signup") || caminho.equals("/auth/signin")))
-                || (HttpMethod.GET.equals(request.getMethod()) && caminho.startsWith("/perfis/"));
+                || (HttpMethod.GET.equals(request.getMethod()) && caminho.startsWith("/perfis/"))
+                || (HttpMethod.GET.equals(request.getMethod()) && (caminho.equals("/catalogo/categorias")
+                    || caminho.equals("/catalogo/servicos") || caminho.startsWith("/catalogo/servicos/")));
         if (publica) return chain.filter(exchange.mutate().request(limpa).build());
 
         String autorizacao = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);

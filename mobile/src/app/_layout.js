@@ -23,6 +23,9 @@ export default function RootLayout() {
         <Stack.Screen name="cadastro" options={{ title: 'Criar conta' }} />
         <Stack.Screen name="perfil" options={{ title: 'Meu perfil' }} />
         <Stack.Screen name="perfil/[id]" options={{ title: 'Perfil público' }} />
+        <Stack.Screen name="servicos/index" options={{ title: 'Serviços' }} />
+        <Stack.Screen name="servicos/formulario" options={{ title: 'Serviço' }} />
+        <Stack.Screen name="servicos/[id]" options={{ title: 'Detalhes do serviço' }} />
       </Stack>
       </AuthProvider>
     </PaperProvider>
