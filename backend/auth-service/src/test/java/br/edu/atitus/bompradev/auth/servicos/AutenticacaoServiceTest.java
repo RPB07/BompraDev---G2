@@ -1,5 +1,6 @@
 package br.edu.atitus.bompradev.auth.servicos;
 
+import br.edu.atitus.bompradev.auth.componentes.JwtUtil;
 import br.edu.atitus.bompradev.auth.dtos.LoginRequest;
 import br.edu.atitus.bompradev.auth.entidades.TipoUsuario;
 import br.edu.atitus.bompradev.auth.entidades.Usuario;
@@ -10,9 +11,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -25,29 +26,25 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AutenticacaoServiceTest {
-    @Mock
-    private UsuarioRepository repositorio;
-    @Mock
-    private JwtEncoder jwtEncoder;
-    private BCryptPasswordEncoder encoder;
+    @Mock private UsuarioRepository repositorio;
+    @Mock private AuthenticationManager authenticationManager;
+    @Mock private JwtUtil jwtUtil;
     private AutenticacaoService autenticacao;
     private Usuario usuario;
 
     @BeforeEach
     void preparar() {
-        encoder = new BCryptPasswordEncoder(4);
-        autenticacao = new AutenticacaoService(repositorio, encoder, jwtEncoder);
-        usuario = new Usuario("Pessoa", "pessoa@exemplo.com", encoder.encode("senha123"), TipoUsuario.PROVIDER);
+        autenticacao = new AutenticacaoService(repositorio, authenticationManager, jwtUtil);
+        usuario = new Usuario("Pessoa", "pessoa@exemplo.com", "hash", TipoUsuario.PROVIDER);
         ReflectionTestUtils.setField(usuario, "id", UUID.randomUUID());
     }
 
     @Test
     void autenticaUsuarioEDevolveToken() {
         when(repositorio.findByEmailIgnoreCase("pessoa@exemplo.com")).thenReturn(Optional.of(usuario));
-        when(jwtEncoder.encode(any())).thenReturn(Jwt.withTokenValue("token").header("alg", "HS256").subject("usuario").build());
-
+        when(jwtUtil.gerarToken(usuario, 3600)).thenReturn("token");
         var resposta = autenticacao.entrar(new LoginRequest("PESSOA@exemplo.com", "senha123"));
-
+        verify(authenticationManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
         assertEquals("token", resposta.token());
         assertEquals("Bearer", resposta.tipoToken());
         assertEquals(3600, resposta.expiraEmSegundos());
@@ -55,24 +52,23 @@ class AutenticacaoServiceTest {
     }
 
     @Test
-    void rejeitaSenhaIncorretaSemEmitirToken() {
-        when(repositorio.findByEmailIgnoreCase("pessoa@exemplo.com")).thenReturn(Optional.of(usuario));
+    void rejeitaCredenciaisIncorretasSemEmitirToken() {
+        when(authenticationManager.authenticate(any())).thenThrow(new BadCredentialsException("Inválido"));
         var erro = assertThrows(ResponseStatusException.class,
                 () -> autenticacao.entrar(new LoginRequest("pessoa@exemplo.com", "senhaerrada")));
         assertEquals(HttpStatus.UNAUTHORIZED, erro.getStatusCode());
-        verifyNoInteractions(jwtEncoder);
+        verifyNoInteractions(jwtUtil);
+        verifyNoInteractions(repositorio);
     }
 
     @Test
-    void rejeitaUsuarioInexistenteOuInativo() {
-        when(repositorio.findByEmailIgnoreCase("pessoa@exemplo.com"))
-                .thenReturn(Optional.empty(), Optional.of(usuario));
-        assertEquals(HttpStatus.UNAUTHORIZED, assertThrows(ResponseStatusException.class,
-                () -> autenticacao.entrar(new LoginRequest("pessoa@exemplo.com", "senha123"))).getStatusCode());
+    void rejeitaUsuarioInativoAposAutenticacao() {
         ReflectionTestUtils.setField(usuario, "ativo", false);
-        assertEquals(HttpStatus.UNAUTHORIZED, assertThrows(ResponseStatusException.class,
-                () -> autenticacao.entrar(new LoginRequest("pessoa@exemplo.com", "senha123"))).getStatusCode());
-        verifyNoInteractions(jwtEncoder);
+        when(repositorio.findByEmailIgnoreCase("pessoa@exemplo.com")).thenReturn(Optional.of(usuario));
+        var erro = assertThrows(ResponseStatusException.class,
+                () -> autenticacao.entrar(new LoginRequest("pessoa@exemplo.com", "senha123")));
+        assertEquals(HttpStatus.UNAUTHORIZED, erro.getStatusCode());
+        verifyNoInteractions(jwtUtil);
     }
 
     @Test

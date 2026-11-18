@@ -66,3 +66,5 @@ Envie `POST /auth/signin` ao `auth-service` na porta 8081 com o e-mail e a senha
 
 A resposta contém `token`, `tipoToken`, `expiraEmSegundos` e os dados básicos de `usuario`. O token expira após uma hora. Para consultar a própria conta em `GET /auth/me`, envie o cabeçalho `Authorization: Bearer <token>`. Credenciais incorretas, usuários inativos e tokens inválidos são recusados. O gateway, a autorização por perfil e as telas de cadastro e login ainda serão integrados nas próximas entregas; por enquanto, use as rotas diretamente no serviço.
 
+O login segue o exemplo `auth-api` do professor Luciano: usa `AuthenticationManager`, `UserDetailsService`, BCrypt e JJWT 0.13.0. A rota `/auth/me` foi inspirada no material do professor Augusto; no BompraDev, ela retorna diretamente os dados do usuário, sem o objeto `user` que envolve a resposta no exemplo dele. A integração da validação JJWT com o Spring Security na rota protegida adapta os exemplos à estrutura já existente do projeto; a chave é fornecida por variável de ambiente e não fica no código.
+
