@@ -6,7 +6,7 @@ O projeto integra as disciplinas de Projeto, Design e Engenharia de Processos, P
 
 ## Situação atual
 
-O escopo inicial e a fundação técnica foram consolidados. O ambiente Docker utiliza o Consul para descoberta e configurações centralizadas. Há cadastro, login e perfis integrados ao auth-service pelo API Gateway. A etapa de serviços começou com catálogo, filtro, detalhes e publicação e edição pelo provider. As seções de conteúdo apresentam exemplos locais para navegação; enquetes persistentes, promoções reais, agendamentos e moderação ainda serão implementados.
+O ambiente Docker utiliza o Consul para descoberta e configurações centralizadas. Há cadastro, login, perfis, catálogo de serviços e agenda com solicitação, aprovação e recusa de horários. As seções de conteúdo apresentam exemplos locais; enquetes persistentes, promoções, pagamento simulado e moderação ainda não estão implementados.
 
 Para executar o projeto, consulte as orientações do [backend](backend/README.md) e do [aplicativo](mobile/README.md).
 
@@ -24,16 +24,9 @@ Para executar o projeto, consulte as orientações do [backend](backend/README.m
 - **BOMPRAPRÊMIO:** itens promocionais e solicitações de resgate, sem pagamentos.
 - **Serviços:** catálogo de serviços publicados por providers e contratação por agendamento.
 
-## Documentação
-
-- [Visão e escopo do MVP](docs/visao-e-escopo.md)
-- [Backlog inicial](docs/backlog-inicial.md)
-- [Arquitetura inicial](docs/arquitetura-inicial.md)
-
 ## Estrutura do repositório
 
 - `backend`: API Gateway e microsserviços Spring Boot.
 - `mobile`: aplicativo React Native com Expo.
-- `docs`: escopo, arquitetura e planejamento das entregas.
 - `compose.yaml`: infraestrutura e execução integrada dos serviços.
 

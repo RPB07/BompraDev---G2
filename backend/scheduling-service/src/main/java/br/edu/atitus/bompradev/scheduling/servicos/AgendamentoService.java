@@ -53,12 +53,31 @@ public class AgendamentoService {
         }
         Instant inicio = dados.data().atTime(dados.horario()).atZone(FUSO).toInstant();
         Instant fim = inicio.plus(Duration.ofMinutes(servico.duracaoMinutos()));
-        return AgendamentoResponse.de(agendamentos.save(new Agendamento(servico.id(), userId, servico.providerId(), inicio, fim)));
+        return AgendamentoResponse.de(agendamentos.save(new Agendamento(servico.id(), userId, servico.providerId(), inicio, fim, servico.valor())));
     }
 
     @Transactional(readOnly = true)
     public List<AgendamentoResponse> meus(UUID userId) {
         return agendamentos.findByUserIdOrderByInicioDesc(userId).stream().map(AgendamentoResponse::de).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<AgendamentoResponse> recebidos(UUID providerId) {
+        return agendamentos.findByProviderIdOrderByInicioDesc(providerId).stream().map(AgendamentoResponse::de).toList();
+    }
+
+    @Transactional
+    public AgendamentoResponse decidir(UUID providerId, UUID id, boolean aprovar) {
+        var agendamento = agendamentos.buscarParaDecisao(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Agendamento não encontrado"));
+        if (!agendamento.getProviderId().equals(providerId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Agendamento pertence a outro prestador");
+        }
+        if (agendamento.getSituacao() != SituacaoAgendamento.PENDENTE) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Agendamento já foi respondido");
+        }
+        agendamento.decidir(aprovar ? SituacaoAgendamento.APROVADO : SituacaoAgendamento.RECUSADO);
+        return AgendamentoResponse.de(agendamento);
     }
 
     private List<LocalTime> horariosDisponiveis(ServicoCatalogo servico, LocalDate data) {

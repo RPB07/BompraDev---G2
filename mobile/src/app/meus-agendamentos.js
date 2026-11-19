@@ -45,6 +45,7 @@ export default function MeusAgendamentos() {
           <Card key={item.id} style={styles.cartao}><Card.Content>
             <Text variant="titleMedium">{item.titulo}</Text>
             <Text>{formatarData(item.inicio)}</Text>
+            <Text>{item.valorContratado == null ? 'Valor não registrado' : `Valor: R$ ${Number(item.valorContratado).toFixed(2).replace('.', ',')}`}</Text>
             <Text>{situacoes[item.situacao] ?? item.situacao}</Text>
           </Card.Content></Card>
         ))}

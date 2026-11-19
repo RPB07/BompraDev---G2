@@ -2,6 +2,7 @@ package br.edu.atitus.bompradev.scheduling.entidades;
 
 import jakarta.persistence.*;
 import java.time.Instant;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -19,16 +20,21 @@ public class Agendamento {
     private Instant inicio;
     @Column(nullable = false)
     private Instant fim;
+    @Column(name = "valor_contratado", precision = 10, scale = 2)
+    private BigDecimal valorContratado;
+    @Column(name = "atualizado_em", insertable = false, nullable = false)
+    private Instant atualizadoEm;
     @Enumerated(EnumType.STRING) @Column(nullable = false, length = 20)
     private SituacaoAgendamento situacao = SituacaoAgendamento.PENDENTE;
 
     protected Agendamento() {}
-    public Agendamento(UUID servicoId, UUID userId, UUID providerId, Instant inicio, Instant fim) {
+    public Agendamento(UUID servicoId, UUID userId, UUID providerId, Instant inicio, Instant fim, BigDecimal valorContratado) {
         this.servicoId = servicoId;
         this.userId = userId;
         this.providerId = providerId;
         this.inicio = inicio;
         this.fim = fim;
+        this.valorContratado = valorContratado;
     }
 
     public UUID getId() { return id; }
@@ -37,5 +43,9 @@ public class Agendamento {
     public UUID getProviderId() { return providerId; }
     public Instant getInicio() { return inicio; }
     public Instant getFim() { return fim; }
+    public BigDecimal getValorContratado() { return valorContratado; }
     public SituacaoAgendamento getSituacao() { return situacao; }
+    public void decidir(SituacaoAgendamento decisao) { this.situacao = decisao; }
+    @PreUpdate
+    protected void atualizarData() { atualizadoEm = Instant.now(); }
 }

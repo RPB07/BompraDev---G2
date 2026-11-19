@@ -61,6 +61,8 @@ public class ConfigSecurity {
                         .requestMatchers("/agenda/disponibilidades", "/agenda/disponibilidades/*").hasAuthority("PROVIDER")
                         .requestMatchers(HttpMethod.GET, "/agenda/horarios", "/agenda/agendamentos/meus").hasAnyAuthority("USER", "PROVIDER")
                         .requestMatchers(HttpMethod.POST, "/agenda/agendamentos").hasAnyAuthority("USER", "PROVIDER")
+                        .requestMatchers(HttpMethod.GET, "/agenda/agendamentos/recebidos").hasAuthority("PROVIDER")
+                        .requestMatchers(HttpMethod.PUT, "/agenda/agendamentos/*/aprovar", "/agenda/agendamentos/*/recusar").hasAuthority("PROVIDER")
                         .anyRequest().denyAll())
                 .oauth2ResourceServer(oauth -> oauth.jwt(jwt -> jwt.jwtAuthenticationConverter(this::autenticacao)))
                 .build();

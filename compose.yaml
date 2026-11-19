@@ -1,6 +1,18 @@
 name: bompradev
 
+x-telemetria: &telemetria
+  MANAGEMENT_OPENTELEMETRY_TRACING_EXPORT_OTLP_ENDPOINT: http://observabilidade:4318/v1/traces
+  MANAGEMENT_OPENTELEMETRY_LOGGING_EXPORT_OTLP_ENDPOINT: http://observabilidade:4318/v1/logs
+  MANAGEMENT_OTLP_METRICS_EXPORT_URL: http://observabilidade:4318/v1/metrics
+  MANAGEMENT_OTLP_METRICS_EXPORT_STEP: 15s
+  MANAGEMENT_TRACING_SAMPLING_PROBABILITY: 1.0
+
 services:
+  observabilidade:
+    image: grafana/otel-lgtm:0.41.0
+    ports:
+      - "127.0.0.1:${GRAFANA_PORT:-3000}:3000"
+
   consul:
     image: hashicorp/consul:1.21
     command: agent -server -bootstrap-expect=1 -ui -client=0.0.0.0 -node=consul -data-dir=/consul/data
@@ -78,6 +90,8 @@ services:
   auth-service:
     build: ./backend/auth-service
     environment:
+      <<: *telemetria
+      OTEL_SERVICE_NAME: auth-service
       DATABASE_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be defined}
       CONSUL_HOST: consul
       SPRING_CONFIG_IMPORT: "consul:"
@@ -99,6 +113,8 @@ services:
   catalog-service:
     build: ./backend/catalog-service
     environment:
+      <<: *telemetria
+      OTEL_SERVICE_NAME: catalog-service
       DATABASE_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be defined}
       CONSUL_HOST: consul
       SPRING_CONFIG_IMPORT: "consul:"
@@ -120,6 +136,8 @@ services:
   scheduling-service:
     build: ./backend/scheduling-service
     environment:
+      <<: *telemetria
+      OTEL_SERVICE_NAME: scheduling-service
       DATABASE_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be defined}
       CONSUL_HOST: consul
       SPRING_CONFIG_IMPORT: "consul:"
@@ -141,6 +159,8 @@ services:
   api-gateway:
     build: ./backend/api-gateway
     environment:
+      <<: *telemetria
+      OTEL_SERVICE_NAME: api-gateway
       CONSUL_HOST: consul
       SPRING_CONFIG_IMPORT: "consul:"
       JWT_SECRET: ${JWT_SECRET:?JWT_SECRET must be defined}

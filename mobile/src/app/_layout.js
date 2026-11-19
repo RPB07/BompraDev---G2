@@ -25,6 +25,7 @@ export default function RootLayout() {
         <Stack.Screen name="disponibilidade" options={{ title: 'Minha disponibilidade' }} />
         <Stack.Screen name="agendamento" options={{ title: 'Solicitar agendamento' }} />
         <Stack.Screen name="meus-agendamentos" options={{ title: 'Meus agendamentos' }} />
+        <Stack.Screen name="solicitacoes" options={{ title: 'Solicitações recebidas' }} />
         <Stack.Screen name="perfil/[id]" options={{ title: 'Perfil público' }} />
         <Stack.Screen name="secoes/[id]" options={{ title: 'BompraDev' }} />
         <Stack.Screen name="servicos/index" options={{ title: 'Serviços' }} />

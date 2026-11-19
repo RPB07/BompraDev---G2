@@ -19,7 +19,9 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -42,7 +44,7 @@ class AgendamentoServiceTest {
     void preparar() { agenda = new AgendamentoService(catalogo, disponibilidades, agendamentos, jdbc); }
 
     private void prepararPeriodo(int duracao) {
-        when(catalogo.consultar(servicoId)).thenReturn(new ServicoCatalogo(servicoId, providerId, duracao));
+        when(catalogo.consultar(servicoId)).thenReturn(new ServicoCatalogo(servicoId, providerId, duracao, new BigDecimal("100.00")));
         var periodo = new Disponibilidade(providerId, (short) (data.getDayOfWeek().getValue() % 7),
                 LocalTime.of(9, 0), LocalTime.of(12, 0));
         when(disponibilidades.findByProviderIdAndDiaSemanaAndAtivaTrueOrderByHoraInicioAsc(providerId,
@@ -59,7 +61,7 @@ class AgendamentoServiceTest {
     void removeTodosOsHorariosQueSobrepoemUmaReserva() {
         prepararPeriodo(60);
         var ocupado = new Agendamento(servicoId, UUID.randomUUID(), providerId,
-                data.atTime(9, 30).atZone(fuso).toInstant(), data.atTime(10, 30).atZone(fuso).toInstant());
+                data.atTime(9, 30).atZone(fuso).toInstant(), data.atTime(10, 30).atZone(fuso).toInstant(), new BigDecimal("100.00"));
         when(agendamentos.findByProviderIdAndSituacaoInAndInicioLessThanAndFimGreaterThan(eq(providerId), anyCollection(), any(), any()))
                 .thenReturn(List.of(ocupado));
         assertEquals(List.of(LocalTime.of(11, 0)), agenda.horarios(servicoId, data));
@@ -72,6 +74,7 @@ class AgendamentoServiceTest {
         var resultado = agenda.solicitar(userId, new AgendamentoRequest(servicoId, data, LocalTime.of(9, 0)));
         assertEquals(providerId, resultado.providerId());
         assertEquals(SituacaoAgendamento.PENDENTE, resultado.situacao());
+        assertEquals(new BigDecimal("100.00"), resultado.valorContratado());
         assertEquals(data.atTime(9, 0).atZone(fuso).toInstant(), resultado.inicio());
         assertEquals(data.atTime(10, 0).atZone(fuso).toInstant(), resultado.fim());
     }
@@ -87,7 +90,7 @@ class AgendamentoServiceTest {
 
     @Test
     void naoOfereceDatasPassadas() {
-        when(catalogo.consultar(servicoId)).thenReturn(new ServicoCatalogo(servicoId, providerId, 60));
+        when(catalogo.consultar(servicoId)).thenReturn(new ServicoCatalogo(servicoId, providerId, 60, new BigDecimal("100.00")));
         assertTrue(agenda.horarios(servicoId, LocalDate.now(fuso).minusDays(1)).isEmpty());
         verifyNoInteractions(disponibilidades, agendamentos);
     }
@@ -96,5 +99,42 @@ class AgendamentoServiceTest {
     void naoEncaixaServicoMaiorQueOPeriodo() {
         prepararPeriodo(181);
         assertTrue(agenda.horarios(servicoId, data).isEmpty());
+    }
+
+    @Test
+    void prestadorPodeAprovarSolicitacaoPendente() {
+        var id = UUID.randomUUID();
+        var pedido = new Agendamento(servicoId, userId, providerId, data.atTime(9, 0).atZone(fuso).toInstant(), data.atTime(10, 0).atZone(fuso).toInstant(), new BigDecimal("100.00"));
+        when(agendamentos.buscarParaDecisao(id)).thenReturn(Optional.of(pedido));
+        assertEquals(SituacaoAgendamento.APROVADO, agenda.decidir(providerId, id, true).situacao());
+    }
+
+    @Test
+    void prestadorPodeRecusarSolicitacaoPendente() {
+        var id = UUID.randomUUID();
+        var pedido = new Agendamento(servicoId, userId, providerId, data.atTime(9, 0).atZone(fuso).toInstant(), data.atTime(10, 0).atZone(fuso).toInstant(), new BigDecimal("100.00"));
+        when(agendamentos.buscarParaDecisao(id)).thenReturn(Optional.of(pedido));
+        assertEquals(SituacaoAgendamento.RECUSADO, agenda.decidir(providerId, id, false).situacao());
+    }
+
+    @Test
+    void outroPrestadorNaoPodeResponder() {
+        var id = UUID.randomUUID();
+        var pedido = new Agendamento(servicoId, userId, providerId, data.atTime(9, 0).atZone(fuso).toInstant(), data.atTime(10, 0).atZone(fuso).toInstant(), new BigDecimal("100.00"));
+        when(agendamentos.buscarParaDecisao(id)).thenReturn(Optional.of(pedido));
+        var erro = assertThrows(ResponseStatusException.class, () -> agenda.decidir(UUID.randomUUID(), id, true));
+        assertEquals(HttpStatus.FORBIDDEN, erro.getStatusCode());
+        assertEquals(SituacaoAgendamento.PENDENTE, pedido.getSituacao());
+    }
+
+    @Test
+    void naoPermiteResponderDuasVezes() {
+        var id = UUID.randomUUID();
+        var pedido = new Agendamento(servicoId, userId, providerId, data.atTime(9, 0).atZone(fuso).toInstant(), data.atTime(10, 0).atZone(fuso).toInstant(), new BigDecimal("100.00"));
+        pedido.decidir(SituacaoAgendamento.APROVADO);
+        when(agendamentos.buscarParaDecisao(id)).thenReturn(Optional.of(pedido));
+        var erro = assertThrows(ResponseStatusException.class, () -> agenda.decidir(providerId, id, false));
+        assertEquals(HttpStatus.CONFLICT, erro.getStatusCode());
+        assertEquals(SituacaoAgendamento.APROVADO, pedido.getSituacao());
     }
 }

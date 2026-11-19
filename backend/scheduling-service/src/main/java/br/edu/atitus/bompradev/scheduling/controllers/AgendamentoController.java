@@ -36,4 +36,19 @@ public class AgendamentoController {
     public List<AgendamentoResponse> meus(@AuthenticationPrincipal Jwt jwt) {
         return agenda.meus(UUID.fromString(jwt.getSubject()));
     }
+
+    @GetMapping("/agendamentos/recebidos")
+    public List<AgendamentoResponse> recebidos(@AuthenticationPrincipal Jwt jwt) {
+        return agenda.recebidos(UUID.fromString(jwt.getSubject()));
+    }
+
+    @PutMapping("/agendamentos/{id}/aprovar")
+    public AgendamentoResponse aprovar(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID id) {
+        return agenda.decidir(UUID.fromString(jwt.getSubject()), id, true);
+    }
+
+    @PutMapping("/agendamentos/{id}/recusar")
+    public AgendamentoResponse recusar(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID id) {
+        return agenda.decidir(UUID.fromString(jwt.getSubject()), id, false);
+    }
 }

@@ -54,6 +54,12 @@ Alterações em valores do Consul podem exigir a reinicialização do serviço c
 
 O Consul está configurado como um único servidor para desenvolvimento, sem configuração de ACL ou TLS para produção. Sua interface e as portas dos bancos e serviços internos ficam vinculadas ao `localhost`; o gateway continua acessível pela rede local para permitir testes em dispositivo físico. Em redes compartilhadas, use apenas dados fictícios e mantenha o firewall ativo. Não exponha esse ambiente à internet nem armazene senhas ou chaves no Consul de desenvolvimento.
 
+## Observabilidade local
+
+O Compose inclui o Grafana com coleta local de logs, métricas e rastreamentos via OpenTelemetry. Com o ambiente iniciado, acesse `http://localhost:3000` (ou a porta `GRAFANA_PORT` configurada) e entre com o usuário e a senha padrão `admin`. Em **Explore**, selecione Loki para logs, Prometheus para métricas ou Tempo para rastreamentos. Uma consulta de horários pode ser acompanhada entre gateway, agenda e catálogo.
+
+Essa configuração é destinada a desenvolvimento: a interface fica restrita ao computador local, usa credenciais padrão e não deve ser exposta à internet. Os dados da observabilidade são temporários e podem ser perdidos ao recriar o container. A primeira execução precisa baixar a imagem do Grafana.
+
 Ao encerrar o ambiente, `docker compose down` preserva os volumes. Não use `docker compose down -v` sem antes confirmar e preservar os dados: esse comando também remove volumes do projeto.
 
 ## Cadastro inicial
@@ -98,7 +104,7 @@ O gateway consulta o Consul para localizar o auth-service e valida o JWT nas rot
 Para iniciar apenas a infraestrutura necessária à etapa de acesso e perfis, execute na raiz:
 
 ```powershell
-docker compose up -d --build auth-service catalog-service api-gateway
+docker compose up -d --build observabilidade auth-service catalog-service api-gateway
 ```
 
 A inicialização pode demorar enquanto as imagens são compiladas e os serviços registrados. A migração `V2` acrescenta os campos de perfil ao banco de autenticação existente sem substituir a migração anterior.
@@ -124,5 +130,22 @@ Nas rotas protegidas, envie `Authorization: Bearer <token>`. Exemplo de corpo pa
 {"categoriaId":"<id-da-categoria>","titulo":"Serviço","descricao":"Descrição do serviço","valor":120.00,"duracaoMinutos":60}
 ```
 
-O gateway e o catálogo validam o JWT, e o catálogo verifica o perfil e a propriedade do serviço. A moderação administrativa, a inativação e os agendamentos ainda não estão implementados. A organização de entidades, repositórios, serviços e controllers adapta os exemplos do `product-api` do professor Luciano; as regras de publicação e propriedade pertencem ao BompraDev.
+O gateway e o catálogo validam o JWT, e o catálogo verifica o perfil e a propriedade do serviço. A moderação administrativa e a inativação ainda não estão implementadas. A organização de entidades, repositórios, serviços e controllers adapta os exemplos do `product-api` do professor Luciano; as regras de publicação e propriedade pertencem ao BompraDev.
+
+## Agenda
+
+O prestador cadastra períodos semanais e responde às solicitações recebidas. O cliente consulta os horários pela duração do serviço, solicita um horário e acompanha o estado em seu perfil. Os horários seguem o fuso de Brasília.
+
+A consulta da agenda ao catálogo usa limite de espera, novas tentativas para falhas temporárias e circuit breaker. A criação do agendamento não é repetida automaticamente. Quando uma solicitação é recusada, o período volta a aparecer como disponível, desde que ainda não tenha passado e continue dentro da disponibilidade do prestador.
+
+Novas solicitações guardam o preço informado pelo catálogo no momento da solicitação. Registros anteriores a essa funcionalidade não possuem preço histórico. Pagamento simulado, cancelamento e remarcação ainda não foram implementados.
+
+Pelo gateway, com token Bearer:
+
+- `GET` e `POST /agenda/disponibilidades` e `DELETE /agenda/disponibilidades/{id}`: manutenção dos horários do prestador.
+- `GET /agenda/horarios?servicoId={id}&data=AAAA-MM-DD`: horários disponíveis.
+- `POST /agenda/agendamentos`: solicita um horário com `servicoId`, `data` e `horario`.
+- `GET /agenda/agendamentos/meus`: solicitações do cliente.
+- `GET /agenda/agendamentos/recebidos`: solicitações dos serviços do prestador.
+- `PUT /agenda/agendamentos/{id}/aprovar` e `PUT /agenda/agendamentos/{id}/recusar`: resposta pelo prestador responsável.
 

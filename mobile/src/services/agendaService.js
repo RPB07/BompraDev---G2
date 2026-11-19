@@ -31,3 +31,14 @@ export function solicitarAgendamento(token, dados) {
 export function listarMeusAgendamentos(token) {
   return requisicaoApi('/agenda/agendamentos/meus', { headers: { Authorization: `Bearer ${token}` } });
 }
+
+export function listarAgendamentosRecebidos(token) {
+  return requisicaoApi('/agenda/agendamentos/recebidos', { headers: { Authorization: `Bearer ${token}` } });
+}
+
+export function responderAgendamento(token, id, aprovar) {
+  const acao = aprovar ? 'aprovar' : 'recusar';
+  return requisicaoApi(`/agenda/agendamentos/${encodeURIComponent(id)}/${acao}`, {
+    method: 'PUT', headers: { Authorization: `Bearer ${token}` },
+  });
+}

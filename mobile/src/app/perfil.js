@@ -65,6 +65,7 @@ function FormularioPerfil({ usuario }) {
         <Button mode="outlined" style={styles.botao} onPress={() => router.push({ pathname: '/perfil/[id]', params: { id: usuario.id } })} disabled={carregando}>Ver perfil público</Button>
         {usuario.tipo !== 'ADMIN' ? <Button mode="outlined" style={styles.botao} onPress={() => router.push('/meus-agendamentos')} disabled={carregando}>Meus agendamentos</Button> : null}
         {usuario.tipo === 'PROVIDER' ? <Button mode="outlined" style={styles.botao} onPress={() => router.push('/disponibilidade')} disabled={carregando}>Minha disponibilidade</Button> : null}
+        {usuario.tipo === 'PROVIDER' ? <Button mode="outlined" style={styles.botao} onPress={() => router.push('/solicitacoes')} disabled={carregando}>Solicitações recebidas</Button> : null}
         {usuario.tipo === 'USER' ? <Button mode="outlined" style={styles.botao} onPress={ativar} disabled={carregando}>Oferecer serviços como prestador</Button> : null}
         <Button mode="text" style={styles.botao} onPress={encerrar} disabled={carregando}>Sair da conta</Button>
       </ScrollView>
