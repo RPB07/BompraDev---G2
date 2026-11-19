@@ -38,6 +38,24 @@ Antes da execução, substitua `POSTGRES_PASSWORD` e `JWT_SECRET` no arquivo `.e
 
 `AUTH_DB_PORT` altera somente a porta do PostgreSQL de autenticação no computador local. `AUTH_DATA_VOLUME` escolhe o volume Docker desse banco; o padrão mantém o volume existente. Não substitua ou apague um volume com dados sem primeiro preservar uma cópia e confirmar seu conteúdo.
 
+## Configuração centralizada
+
+O Compose inicia o Consul e, em seguida, o serviço `consul-config`, que executa `infra/consul/load-config.sh`. O script cadastra no armazenamento de chaves e valores as portas internas, URLs dos bancos e nomes de usuário iniciais dos serviços. Cada serviço aguarda o carregamento e busca suas configurações no Consul antes de iniciar. Isso adapta o padrão apresentado no material do Order API.
+
+O script cria apenas chaves ausentes: ele não sobrescreve configurações já alteradas. Os valores são preservados no volume Docker `consul-data`. Os serviços também podem ser configurados por variáveis de ambiente quando executados fora do Compose. `POSTGRES_PASSWORD` e `JWT_SECRET` continuam no arquivo local `.env` e não são carregados no Consul.
+
+Para consultar uma configuração não sensível no ambiente local:
+
+```powershell
+docker compose exec consul consul kv get config/catalog-service/server.port
+```
+
+Alterações em valores do Consul podem exigir a reinicialização do serviço correspondente. A mudança da porta interna também exige ajustar o mapeamento de portas no Compose. Não altere o usuário ou senha dos bancos existentes sem planejar a migração dos dados; mudar o arquivo `.env` ou o Consul não altera automaticamente as credenciais já gravadas no PostgreSQL.
+
+O Consul está configurado como um único servidor para desenvolvimento, sem configuração de ACL ou TLS para produção. Sua interface e as portas dos bancos e serviços internos ficam vinculadas ao `localhost`; o gateway continua acessível pela rede local para permitir testes em dispositivo físico. Em redes compartilhadas, use apenas dados fictícios e mantenha o firewall ativo. Não exponha esse ambiente à internet nem armazene senhas ou chaves no Consul de desenvolvimento.
+
+Ao encerrar o ambiente, `docker compose down` preserva os volumes. Não use `docker compose down -v` sem antes confirmar e preservar os dados: esse comando também remove volumes do projeto.
+
 ## Cadastro inicial
 
 Com o gateway, o `auth-service`, o Consul e o banco em execução, envie `POST /auth/signup` ao gateway na porta 8080:

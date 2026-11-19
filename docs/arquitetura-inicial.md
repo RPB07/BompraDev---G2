@@ -45,7 +45,9 @@ Será adotado o padrão Database per Service. Cada microsserviço será propriet
 
 ## Configuração e descoberta
 
-O Consul será utilizado inicialmente para configuração centralizada, registro e descoberta de serviços, seguindo o exemplo desenvolvido nas aulas. Configurações sensíveis serão fornecidas por variáveis de ambiente e não serão versionadas.
+O Consul é utilizado para configuração centralizada, registro e descoberta de serviços, seguindo o exemplo desenvolvido nas aulas. No Docker Compose, `consul-config` executa `infra/consul/load-config.sh` para cadastrar valores iniciais não sensíveis sem sobrescrever chaves existentes. Os valores ficam no volume `consul-data`; os serviços aguardam a configuração e a consultam na inicialização. Senhas e a chave JWT são fornecidas por variáveis de ambiente e não são inseridas no Consul ou versionadas.
+
+O Consul possui um único servidor voltado ao desenvolvimento local. A interface, os bancos e os serviços internos são publicados apenas no localhost; o gateway permanece acessível pela rede local para testes com o aplicativo mobile. Esse ambiente não substitui a configuração de segurança necessária para produção.
 
 ## Containerização
 

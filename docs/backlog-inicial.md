@@ -10,7 +10,8 @@ O backlog está organizado por etapas para que o desenvolvimento e as entregas a
 - [x] Validar a jornada principal de contratação por agendamento.
 - [x] Definir que a confirmação depende da aprovação do provider.
 - [ ] Definir os demais estados e regras dos agendamentos.
-- [ ] Definir regras de disponibilidade e conflito de horários.
+- [x] Definir que a disponibilidade será informada em horários semanais recorrentes.
+- [ ] Definir a formação dos horários e o tratamento de conflitos de agendamento.
 - [x] Definir os dados obrigatórios de cada perfil: nome, e-mail e senha.
 - [x] Definir o cadastro e a ativação do perfil `PROVIDER` sem aprovação administrativa.
 - [x] Definir perfil público com biografia e portfólio.
@@ -28,6 +29,7 @@ O backlog está organizado por etapas para que o desenvolvimento e as entregas a
 - [x] Estruturar o projeto mobile com navegação, tema e cliente HTTP.
 - [x] Configurar migrações de banco de dados.
 - [x] Preparar a base da configuração externa e centralizada.
+- [x] Carregar configurações iniciais no Consul e validar seu uso pelos serviços.
 - [x] Preparar a infraestrutura local inicial com Docker Compose.
 
 ## Etapa 3 — Acesso e perfis

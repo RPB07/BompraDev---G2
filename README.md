@@ -6,7 +6,7 @@ O projeto integra as disciplinas de Projeto, Design e Engenharia de Processos, P
 
 ## Situação atual
 
-O escopo inicial e a fundação técnica foram consolidados. Há cadastro, login e perfis integrados ao auth-service pelo API Gateway. A etapa de serviços começou com catálogo, filtro, detalhes e publicação e edição pelo provider. As seções de conteúdo apresentam exemplos locais para navegação; enquetes persistentes, promoções reais, agendamentos e moderação ainda serão implementados.
+O escopo inicial e a fundação técnica foram consolidados. O ambiente Docker utiliza o Consul para descoberta e configurações centralizadas. Há cadastro, login e perfis integrados ao auth-service pelo API Gateway. A etapa de serviços começou com catálogo, filtro, detalhes e publicação e edição pelo provider. As seções de conteúdo apresentam exemplos locais para navegação; enquetes persistentes, promoções reais, agendamentos e moderação ainda serão implementados.
 
 Para executar o projeto, consulte as orientações do [backend](backend/README.md) e do [aplicativo](mobile/README.md).
 

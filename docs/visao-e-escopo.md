@@ -56,6 +56,7 @@ O provider não poderá administrar serviços pertencentes a outro provider nem 
 - Título, descrição, preço, duração e categoria obrigatórios no cadastro do serviço.
 - Categorias iniciais predefinidas no catálogo: Desenvolvimento web, Desenvolvimento mobile, Desenvolvimento de software, Infraestrutura e redes, Suporte técnico, Design e experiência do usuário e Consultoria em tecnologia.
 - Disponibilidade de horários e contratação de serviços por agendamento.
+- Disponibilidade informada pelo provider como horários semanais recorrentes.
 - Aprovação do agendamento pelo provider responsável pelo serviço.
 - Pagamento simulado dos serviços, sem movimentação de dinheiro.
 - Cancelamento pelo contratante com menos de duas horas de antecedência: cobrança simulada de 50% do valor do serviço.
