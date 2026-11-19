@@ -49,6 +49,7 @@ public class DisponibilidadeService {
         if (!disponibilidade.getProviderId().equals(providerId)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Disponibilidade pertence a outro prestador");
         }
+        jdbc.query("SELECT pg_advisory_xact_lock(hashtext(?))", rs -> null, providerId.toString());
         disponibilidades.delete(disponibilidade);
     }
 }

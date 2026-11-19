@@ -38,7 +38,12 @@ export default function DetalheServico() {
         <Button mode="contained" style={styles.secao}
           onPress={() => router.push({ pathname: '/servicos/formulario', params: { id: servico.id } })}>Editar serviço</Button>
       ) : null}
-      <Text style={styles.aviso}>Agendamentos serão adicionados na próxima parte desta etapa.</Text>
+      {usuario?.tipo !== 'ADMIN' ? (
+        <Button mode="contained" style={styles.secao}
+          onPress={() => usuario ? router.push({ pathname: '/agendamento', params: { servicoId: servico.id, titulo: servico.titulo } }) : router.push('/login')}>
+          {usuario ? 'Consultar horários' : 'Entre para consultar horários'}
+        </Button>
+      ) : null}
     </ScrollView>
   );
 }
@@ -47,5 +52,4 @@ const styles = StyleSheet.create({
   conteudo: { flexGrow: 1, padding: 24, backgroundColor: colors.background },
   titulo: { color: colors.text, fontWeight: '700', marginBottom: 8 },
   secao: { marginTop: 20 },
-  aviso: { marginTop: 24, color: colors.textMuted },
 });

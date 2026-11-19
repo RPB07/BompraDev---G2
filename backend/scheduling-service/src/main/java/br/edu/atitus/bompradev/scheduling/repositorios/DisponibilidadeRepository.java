@@ -8,6 +8,7 @@ import java.util.UUID;
 
 public interface DisponibilidadeRepository extends JpaRepository<Disponibilidade, UUID> {
     List<Disponibilidade> findByProviderIdAndAtivaTrueOrderByDiaSemanaAscHoraInicioAsc(UUID providerId);
+    List<Disponibilidade> findByProviderIdAndDiaSemanaAndAtivaTrueOrderByHoraInicioAsc(UUID providerId, Short diaSemana);
     boolean existsByProviderIdAndDiaSemanaAndAtivaTrueAndHoraInicioLessThanAndHoraFimGreaterThan(
             UUID providerId, Short diaSemana, LocalTime horaFim, LocalTime horaInicio);
 }
