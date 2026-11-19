@@ -29,3 +29,7 @@ Thumbs.db
 tmp/
 temp/
 
+docs/
+*.md
+!README.md
+
