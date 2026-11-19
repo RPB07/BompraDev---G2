@@ -17,6 +17,7 @@ public class GatewayConfig {
         return builder.routes()
                 .route("auth-service", rota -> rota.path("/auth/**", "/perfis/**").uri("lb://auth-service"))
                 .route("catalog-service", rota -> rota.path("/catalogo/**").uri("lb://catalog-service"))
+                .route("scheduling-service", rota -> rota.path("/agenda/**").uri("lb://scheduling-service"))
                 .build();
     }
 
@@ -33,6 +34,7 @@ public class GatewayConfig {
         cors.addAllowedMethod("GET");
         cors.addAllowedMethod("POST");
         cors.addAllowedMethod("PUT");
+        cors.addAllowedMethod("DELETE");
         cors.addAllowedHeader("Authorization");
         cors.addAllowedHeader("Content-Type");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

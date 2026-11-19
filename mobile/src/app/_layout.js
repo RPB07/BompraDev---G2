@@ -22,6 +22,7 @@ export default function RootLayout() {
         <Stack.Screen name="login" options={{ title: 'Acessar conta' }} />
         <Stack.Screen name="cadastro" options={{ title: 'Criar conta' }} />
         <Stack.Screen name="perfil" options={{ title: 'Meu perfil' }} />
+        <Stack.Screen name="disponibilidade" options={{ title: 'Minha disponibilidade' }} />
         <Stack.Screen name="perfil/[id]" options={{ title: 'Perfil público' }} />
         <Stack.Screen name="secoes/[id]" options={{ title: 'BompraDev' }} />
         <Stack.Screen name="servicos/index" options={{ title: 'Serviços' }} />

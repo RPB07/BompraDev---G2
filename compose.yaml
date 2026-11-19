@@ -123,6 +123,7 @@ services:
       DATABASE_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be defined}
       CONSUL_HOST: consul
       SPRING_CONFIG_IMPORT: "consul:"
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET must be defined}
       SPRING_CLOUD_CONSUL_CONFIG_WATCH_WAIT_TIME: 5
     ports:
       - "127.0.0.1:8083:8083"
