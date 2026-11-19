@@ -3,30 +3,15 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CartaoCategoria } from '../components/CartaoCategoria';
+import MarcaBompra from '../components/MarcaBompra';
 import { useAuth } from '../context/AuthContext';
+import { secoes } from '../data/secoes';
 import { colors, spacing, typography } from '../theme';
 
 const categorias = [
-  {
-    titulo: 'BOMPRADROP',
-    descricao: 'Notícias, dicas e conteúdos rápidos sobre tecnologia.',
-  },
-  {
-    titulo: 'BOMPRALAB',
-    descricao: 'Guias, tutoriais e materiais para aprofundar conhecimentos.',
-  },
-  {
-    titulo: 'BOMPRAVOZ',
-    descricao: 'Enquetes e pesquisas para participação da comunidade.',
-  },
-  {
-    titulo: 'BOMPRAPRÊMIO',
-    descricao: 'Experiências promocionais e solicitações de resgate.',
-  },
-  {
-    titulo: 'SERVIÇOS',
-    descricao: 'Serviços de tecnologia oferecidos por providers.',
-  },
+  ...secoes.map((secao) => ({ ...secao, caminho: { pathname: '/secoes/[id]', params: { id: secao.id } } })),
+  { id: 'servicos', titulo: 'SERVIÇOS', descricao: 'Serviços de tecnologia oferecidos por providers.',
+    icone: 'briefcase-outline', caminho: '/servicos' },
 ];
 
 export default function HomeScreen() {
@@ -35,7 +20,10 @@ export default function HomeScreen() {
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.header}>
-          <Text style={styles.brand}>BompraDev</Text>
+          <View style={styles.brandRow}>
+            <MarcaBompra tamanho={64} />
+            <Text style={styles.brand}>BompraDev</Text>
+          </View>
           <Text style={styles.subtitle}>
             Conteúdo, comunidade e serviços para quem vive tecnologia.
           </Text>
@@ -52,18 +40,12 @@ export default function HomeScreen() {
         <View style={styles.categories}>
           <Text style={styles.sectionTitle}>Explore a plataforma</Text>
           {categorias.map((categoria) => (
-            categoria.titulo === 'SERVIÇOS' ? (
-              <Pressable key={categoria.titulo} accessibilityRole="button" accessibilityLabel="Ver serviços"
-                onPress={() => router.push('/servicos')}>
-                <CartaoCategoria titulo={categoria.titulo} descricao={categoria.descricao} />
-              </Pressable>
-            ) : (
-            <CartaoCategoria
-              key={categoria.titulo}
-              titulo={categoria.titulo}
-              descricao={categoria.descricao}
-            />
-            )
+            <Pressable key={categoria.id} accessibilityRole="button" accessibilityLabel={`Abrir ${categoria.titulo}`}
+              onPress={() => router.push(categoria.caminho)}
+              style={({ pressed }) => pressed && styles.pressed}>
+              <CartaoCategoria titulo={categoria.titulo} descricao={categoria.descricao} icone={categoria.icone}
+                marca={categoria.id !== 'servicos' ? categoria.id : null} />
+            </Pressable>
           ))}
         </View>
       </ScrollView>
@@ -90,6 +72,11 @@ const styles = StyleSheet.create({
   brand: {
     ...typography.title,
     color: colors.onPrimary,
+  },
+  brandRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.md,
   },
   subtitle: {
     ...typography.body,

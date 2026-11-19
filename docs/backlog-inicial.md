@@ -60,10 +60,13 @@ As permissões específicas das funcionalidades de `PROVIDER` e `ADMIN` serão a
 
 ## Etapa 5 — Conteúdo e participação
 
+- [x] Apresentar conteúdo local demonstrativo nas seções e incorporar a arte de marca fornecida.
 - [ ] Implementar BOMPRADROP e BOMPRALAB.
 - [ ] Implementar BOMPRAVOZ com voto único.
 - [ ] Implementar BOMPRAPRÊMIO sem pagamentos.
 - [ ] Construir os respectivos fluxos mobile.
+
+O conteúdo demonstrativo é local: não possui administração, persistência de votos, sorteios ou resgates reais.
 
 ## Etapa 6 — Operação e qualidade
 
