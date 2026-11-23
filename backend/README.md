@@ -123,6 +123,8 @@ Pelo gateway na porta 8080:
 - `GET /catalogo/meus-servicos`: serviços do provider autenticado.
 - `POST /catalogo/servicos`: publica um serviço do provider autenticado.
 - `PUT /catalogo/servicos/{id}`: altera um serviço disponível pertencente ao provider autenticado.
+- `DELETE /catalogo/servicos/{id}`: inativa o serviço do provider, sem remover os agendamentos existentes.
+- `POST /catalogo/servicos/{id}/imagem`: envia uma imagem JPEG ou PNG de até 5 MB no campo `imagem` de um formulário multipart.
 
 Nas rotas protegidas, envie `Authorization: Bearer <token>`. Exemplo de corpo para cadastro e edição:
 
@@ -130,7 +132,9 @@ Nas rotas protegidas, envie `Authorization: Bearer <token>`. Exemplo de corpo pa
 {"categoriaId":"<id-da-categoria>","titulo":"Serviço","descricao":"Descrição do serviço","valor":120.00,"duracaoMinutos":60}
 ```
 
-O gateway e o catálogo validam o JWT, e o catálogo verifica o perfil e a propriedade do serviço. A moderação administrativa e a inativação ainda não estão implementadas. A organização de entidades, repositórios, serviços e controllers adapta os exemplos do `product-api` do professor Luciano; as regras de publicação e propriedade pertencem ao BompraDev.
+O gateway e o catálogo validam o JWT, e o catálogo verifica o perfil e a propriedade do serviço. Serviços inativos deixam de aparecer no catálogo e não aceitam novas solicitações; os agendamentos já registrados permanecem. A moderação administrativa ainda não está implementada. A organização de entidades, repositórios, serviços e controllers adapta os exemplos do `product-api` do professor Luciano; as regras de publicação e propriedade pertencem ao BompraDev.
+
+O envio de imagens usa Cloudinary, como no exemplo do professor Augusto, com uma adaptação: o envio é realizado pelo backend depois de verificar o usuário e o arquivo. Para habilitá-lo, crie uma conta e coloque a URL de credenciais `CLOUDINARY_URL` no arquivo `.env` local, sem enviá-la ao GitHub ou ao aplicativo. Após configurar, recrie o serviço com `docker compose up -d --build catalog-service`. Sem essa configuração, o restante do catálogo funciona, mas o envio de imagens fica indisponível. Ao trocar uma imagem, o endereço antigo deixa de ser usado no aplicativo, mas o arquivo anterior continua na conta Cloudinary até ser removido manualmente.
 
 ## Agenda
 

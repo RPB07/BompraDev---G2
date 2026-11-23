@@ -67,6 +67,14 @@ public class Servico {
         this.duracaoMinutos = duracaoMinutos;
     }
 
+    public void inativar() {
+        this.situacao = SituacaoServico.INATIVO;
+    }
+
+    public void alterarImagem(String url) {
+        this.imagemUrl = url;
+    }
+
     public UUID getId() { return id; }
     public UUID getProviderId() { return providerId; }
     public Categoria getCategoria() { return categoria; }

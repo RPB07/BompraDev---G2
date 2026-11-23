@@ -55,6 +55,7 @@ export default function ListaServicos() {
       ) : servicos.length === 0 ? <Text>Nenhum serviço encontrado nesta categoria.</Text> : (
         servicos.map((servico) => (
           <Card key={servico.id} style={styles.cartao} onPress={() => router.push({ pathname: '/servicos/[id]', params: { id: servico.id } })}>
+            {servico.imagemUrl ? <Card.Cover source={{ uri: servico.imagemUrl }} /> : null}
             <Card.Content>
               <Text variant="titleMedium">{servico.titulo}</Text>
               <Text>{servico.categoria.nome}</Text>

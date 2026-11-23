@@ -21,3 +21,20 @@ export function salvarServico(token, dados, id) {
     body: JSON.stringify(dados),
   });
 }
+
+export function inativarServico(token, id) {
+  return requisicaoApi(`/catalogo/servicos/${encodeURIComponent(id)}`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${token}` },
+  });
+}
+
+export function enviarImagemServico(token, id, imagem) {
+  const dados = new FormData();
+  dados.append('imagem', imagem);
+  return requisicaoApi(`/catalogo/servicos/${encodeURIComponent(id)}/imagem`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}` },
+    body: dados,
+  });
+}

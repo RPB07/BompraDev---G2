@@ -61,7 +61,9 @@ public class ConfigSecurity {
                         .requestMatchers(HttpMethod.GET, "/catalogo/categorias", "/catalogo/servicos", "/catalogo/servicos/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/catalogo/meus-servicos").hasAuthority("PROVIDER")
                         .requestMatchers(HttpMethod.POST, "/catalogo/servicos").hasAuthority("PROVIDER")
+                        .requestMatchers(HttpMethod.POST, "/catalogo/servicos/*/imagem").hasAuthority("PROVIDER")
                         .requestMatchers(HttpMethod.PUT, "/catalogo/servicos/*").hasAuthority("PROVIDER")
+                        .requestMatchers(HttpMethod.DELETE, "/catalogo/servicos/*").hasAuthority("PROVIDER")
                         .anyRequest().denyAll())
                 .oauth2ResourceServer(oauth -> oauth.jwt(jwt -> jwt.jwtAuthenticationConverter(this::autenticacao)))
                 .build();

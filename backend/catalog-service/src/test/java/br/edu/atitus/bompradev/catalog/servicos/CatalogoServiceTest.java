@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
@@ -26,6 +27,7 @@ import static org.mockito.Mockito.*;
 class CatalogoServiceTest {
     @Mock private CategoriaRepository categorias;
     @Mock private ServicoRepository servicos;
+    @Mock private ImagemService imagens;
     private CatalogoService catalogo;
     private final UUID providerId = UUID.randomUUID();
     private final UUID categoriaId = UUID.randomUUID();
@@ -33,7 +35,7 @@ class CatalogoServiceTest {
             new BigDecimal("120.00"), 60);
 
     @BeforeEach
-    void preparar() { catalogo = new CatalogoService(categorias, servicos); }
+    void preparar() { catalogo = new CatalogoService(categorias, servicos, imagens); }
 
     @Test
     void publicaServicoDoProviderImediatamente() {
@@ -80,5 +82,50 @@ class CatalogoServiceTest {
 
         var erro = assertThrows(ResponseStatusException.class, () -> catalogo.atualizar(id, providerId, dados));
         assertEquals(HttpStatus.CONFLICT, erro.getStatusCode());
+    }
+    @Test
+    void inativaServicoDoProprioProvider() {
+        var id = UUID.randomUUID();
+        var servico = new Servico(providerId, mock(Categoria.class), "Site", "Descrição", BigDecimal.TEN, 60);
+        when(servicos.findById(id)).thenReturn(Optional.of(servico));
+
+        catalogo.inativar(id, providerId);
+
+        assertEquals(SituacaoServico.INATIVO, servico.getSituacao());
+        verify(servicos, never()).delete(any());
+    }
+
+    @Test
+    void naoPermiteInativarServicoDeOutroProvider() {
+        var id = UUID.randomUUID();
+        var servico = new Servico(UUID.randomUUID(), mock(Categoria.class), "Site", "Descrição", BigDecimal.TEN, 60);
+        when(servicos.findById(id)).thenReturn(Optional.of(servico));
+
+        var erro = assertThrows(ResponseStatusException.class, () -> catalogo.inativar(id, providerId));
+        assertEquals(HttpStatus.FORBIDDEN, erro.getStatusCode());
+        assertEquals(SituacaoServico.APROVADO, servico.getSituacao());
+    }
+
+    @Test
+    void naoPermiteInativarServicoJaIndisponivel() {
+        var id = UUID.randomUUID();
+        var servico = new Servico(providerId, mock(Categoria.class), "Site", "Descrição", BigDecimal.TEN, 60);
+        servico.inativar();
+        when(servicos.findById(id)).thenReturn(Optional.of(servico));
+
+        var erro = assertThrows(ResponseStatusException.class, () -> catalogo.inativar(id, providerId));
+        assertEquals(HttpStatus.CONFLICT, erro.getStatusCode());
+    }
+
+    @Test
+    void naoPermiteEnviarImagemParaServicoDeOutroProvider() {
+        var id = UUID.randomUUID();
+        var servico = new Servico(UUID.randomUUID(), mock(Categoria.class), "Site", "Descrição", BigDecimal.TEN, 60);
+        when(servicos.findById(id)).thenReturn(Optional.of(servico));
+        var imagem = new MockMultipartFile("imagem", "teste.png", "image/png", new byte[]{1});
+
+        var erro = assertThrows(ResponseStatusException.class, () -> catalogo.alterarImagem(id, providerId, imagem));
+        assertEquals(HttpStatus.FORBIDDEN, erro.getStatusCode());
+        verifyNoInteractions(imagens);
     }
 }

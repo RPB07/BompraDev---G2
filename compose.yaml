@@ -25,6 +25,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 3m
 
   consul-config:
     image: hashicorp/consul:1.21
@@ -54,6 +55,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 3m
 
   catalog-db:
     image: postgres:17-alpine
@@ -70,6 +72,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 3m
 
   scheduling-db:
     image: postgres:17-alpine
@@ -86,6 +89,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 3m
 
   auth-service:
     build: ./backend/auth-service
@@ -119,6 +123,7 @@ services:
       CONSUL_HOST: consul
       SPRING_CONFIG_IMPORT: "consul:"
       JWT_SECRET: ${JWT_SECRET:?JWT_SECRET must be defined}
+      CLOUDINARY_URL: ${CLOUDINARY_URL:-}
       SPRING_CLOUD_CONSUL_CONFIG_WATCH_WAIT_TIME: 5
     ports:
       - "127.0.0.1:8082:8082"

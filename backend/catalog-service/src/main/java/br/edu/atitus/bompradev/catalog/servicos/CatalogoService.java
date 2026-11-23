@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,10 +21,12 @@ import java.util.UUID;
 public class CatalogoService {
     private final CategoriaRepository categorias;
     private final ServicoRepository servicos;
+    private final ImagemService imagens;
 
-    public CatalogoService(CategoriaRepository categorias, ServicoRepository servicos) {
+    public CatalogoService(CategoriaRepository categorias, ServicoRepository servicos, ImagemService imagens) {
         this.categorias = categorias;
         this.servicos = servicos;
+        this.imagens = imagens;
     }
 
     @Transactional(readOnly = true)
@@ -71,6 +74,33 @@ public class CatalogoService {
         servico.atualizar(buscarCategoria(dados.categoriaId()), dados.titulo().strip(),
                 dados.descricao().strip(), dados.valor(), dados.duracaoMinutos());
         return ServicoResponse.de(servico);
+    }
+
+    @Transactional
+    public ServicoResponse alterarImagem(UUID id, UUID providerId, MultipartFile imagem) {
+        var servico = servicos.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Serviço não encontrado"));
+        if (!servico.getProviderId().equals(providerId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Serviço pertence a outro prestador");
+        }
+        if (servico.getSituacao() != SituacaoServico.APROVADO) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Serviço indisponível para edição");
+        }
+        servico.alterarImagem(imagens.enviar(imagem));
+        return ServicoResponse.de(servico);
+    }
+
+    @Transactional
+    public void inativar(UUID id, UUID providerId) {
+        var servico = servicos.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Serviço não encontrado"));
+        if (!servico.getProviderId().equals(providerId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Serviço pertence a outro prestador");
+        }
+        if (servico.getSituacao() != SituacaoServico.APROVADO) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Serviço indisponível para inativação");
+        }
+        servico.inativar();
     }
 
     private Categoria buscarCategoria(UUID id) {
