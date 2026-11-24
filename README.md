@@ -28,7 +28,7 @@ Para executar o projeto, consulte as orientações do [backend](backend/README.m
 - **BOMPRAPRÊMIO:** itens promocionais e solicitações de resgate, sem pagamentos.
 - **Serviços:** catálogo de serviços publicados por providers e contratação por agendamento.
 
-# Estrutura do repositório
+# Estrutura do repositório 
 
 - `backend`: API Gateway e microsserviços Spring Boot.
 - `mobile`: aplicativo React Native com Expo.
