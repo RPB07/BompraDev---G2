@@ -47,6 +47,6 @@ Num primeiro momento, a qualidade foi validada por testes unitários realizados 
 
 O projeto adotou como princípios: separação de responsabilidades e arquitetura modular, código organizado, legível e reutilizável, validação de dados no frontend e backend, commits pequenos e descritivos, testes para funcionalidades críticas, versionamento e revisão de código. 
 
-# Situação do projeto
+# Desenvolvimentos futuros
 
 O desenvolvimento deverá seguir entregas incrementais, com validação técnica e funcional de cada etapa nos semestres seguintes. 
