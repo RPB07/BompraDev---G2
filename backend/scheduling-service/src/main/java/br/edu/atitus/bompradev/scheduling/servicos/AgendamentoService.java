@@ -6,6 +6,7 @@ import br.edu.atitus.bompradev.scheduling.dtos.AgendamentoResponse;
 import br.edu.atitus.bompradev.scheduling.dtos.ServicoCatalogo;
 import br.edu.atitus.bompradev.scheduling.entidades.Agendamento;
 import br.edu.atitus.bompradev.scheduling.entidades.SituacaoAgendamento;
+import br.edu.atitus.bompradev.scheduling.entidades.SituacaoPagamento;
 import br.edu.atitus.bompradev.scheduling.repositorios.AgendamentoRepository;
 import br.edu.atitus.bompradev.scheduling.repositorios.DisponibilidadeRepository;
 import org.springframework.http.HttpStatus;
@@ -77,6 +78,26 @@ public class AgendamentoService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Agendamento já foi respondido");
         }
         agendamento.decidir(aprovar ? SituacaoAgendamento.APROVADO : SituacaoAgendamento.RECUSADO);
+        return AgendamentoResponse.de(agendamento);
+    }
+
+    @Transactional
+    public AgendamentoResponse pagar(UUID userId, UUID id) {
+        var agendamento = agendamentos.buscarParaDecisao(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Agendamento não encontrado"));
+        if (!agendamento.getUserId().equals(userId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Agendamento pertence a outro cliente");
+        }
+        if (agendamento.getSituacao() != SituacaoAgendamento.APROVADO) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "O prestador precisa aprovar o agendamento");
+        }
+        if (agendamento.getSituacaoPagamento() != SituacaoPagamento.NAO_REALIZADO) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Pagamento já realizado");
+        }
+        if (agendamento.getValorContratado() == null) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "O valor original deste agendamento não foi registrado");
+        }
+        agendamento.registrarPagamento();
         return AgendamentoResponse.de(agendamento);
     }
 

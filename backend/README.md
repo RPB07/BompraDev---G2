@@ -142,7 +142,7 @@ O prestador cadastra períodos semanais e responde às solicitações recebidas.
 
 A consulta da agenda ao catálogo usa limite de espera, novas tentativas para falhas temporárias e circuit breaker. A criação do agendamento não é repetida automaticamente. Quando uma solicitação é recusada, o período volta a aparecer como disponível, desde que ainda não tenha passado e continue dentro da disponibilidade do prestador.
 
-Novas solicitações guardam o preço informado pelo catálogo no momento da solicitação. Registros anteriores a essa funcionalidade não possuem preço histórico. Pagamento simulado, cancelamento e remarcação ainda não foram implementados.
+Novas solicitações guardam o preço informado pelo catálogo no momento da solicitação. Depois da aprovação pelo prestador, o cliente pode registrar um pagamento simulado, sem movimentação financeira. A aprovação não registra o pagamento automaticamente. Registros anteriores ao preço histórico não possuem valor e não permitem esse pagamento. Cancelamento e remarcação ainda não foram implementados.
 
 Pelo gateway, com token Bearer:
 
@@ -152,4 +152,5 @@ Pelo gateway, com token Bearer:
 - `GET /agenda/agendamentos/meus`: solicitações do cliente.
 - `GET /agenda/agendamentos/recebidos`: solicitações dos serviços do prestador.
 - `PUT /agenda/agendamentos/{id}/aprovar` e `PUT /agenda/agendamentos/{id}/recusar`: resposta pelo prestador responsável.
+- `PUT /agenda/agendamentos/{id}/pagamento`: registro de pagamento simulado pelo cliente responsável, após aprovação.
 

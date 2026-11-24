@@ -26,6 +26,8 @@ public class Agendamento {
     private Instant atualizadoEm;
     @Enumerated(EnumType.STRING) @Column(nullable = false, length = 20)
     private SituacaoAgendamento situacao = SituacaoAgendamento.PENDENTE;
+    @Enumerated(EnumType.STRING) @Column(name = "situacao_pagamento", nullable = false, length = 20)
+    private SituacaoPagamento situacaoPagamento = SituacaoPagamento.NAO_REALIZADO;
 
     protected Agendamento() {}
     public Agendamento(UUID servicoId, UUID userId, UUID providerId, Instant inicio, Instant fim, BigDecimal valorContratado) {
@@ -45,7 +47,9 @@ public class Agendamento {
     public Instant getFim() { return fim; }
     public BigDecimal getValorContratado() { return valorContratado; }
     public SituacaoAgendamento getSituacao() { return situacao; }
+    public SituacaoPagamento getSituacaoPagamento() { return situacaoPagamento; }
     public void decidir(SituacaoAgendamento decisao) { this.situacao = decisao; }
+    public void registrarPagamento() { this.situacaoPagamento = SituacaoPagamento.PAGO; }
     @PreUpdate
     protected void atualizarData() { atualizadoEm = Instant.now(); }
 }

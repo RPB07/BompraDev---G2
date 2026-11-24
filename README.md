@@ -6,7 +6,7 @@ O projeto integra as disciplinas de Projeto, Design e Engenharia de Processos, P
 
 ## Situação atual
 
-O ambiente Docker utiliza o Consul para descoberta e configurações centralizadas. Há cadastro, login, perfis, catálogo de serviços e agenda com solicitação, aprovação e recusa de horários. As seções de conteúdo apresentam exemplos locais; enquetes persistentes, promoções, pagamento simulado e moderação ainda não estão implementados.
+O ambiente Docker utiliza o Consul para descoberta e configurações centralizadas. Há cadastro, login, perfis, catálogo de serviços e agenda com solicitação, aprovação, recusa de horários e registro de pagamento simulado. As seções de conteúdo apresentam exemplos locais; enquetes persistentes, promoções, cancelamento, remarcação e moderação ainda não estão implementados.
 
 Para executar o projeto, consulte as orientações do [backend](backend/README.md) e do [aplicativo](mobile/README.md).
 

@@ -42,3 +42,9 @@ export function responderAgendamento(token, id, aprovar) {
     method: 'PUT', headers: { Authorization: `Bearer ${token}` },
   });
 }
+
+export function pagarAgendamento(token, id) {
+  return requisicaoApi(`/agenda/agendamentos/${encodeURIComponent(id)}/pagamento`, {
+    method: 'PUT', headers: { Authorization: `Bearer ${token}` },
+  });
+}

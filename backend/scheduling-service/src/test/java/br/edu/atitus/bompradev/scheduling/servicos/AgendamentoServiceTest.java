@@ -6,6 +6,7 @@ import br.edu.atitus.bompradev.scheduling.dtos.ServicoCatalogo;
 import br.edu.atitus.bompradev.scheduling.entidades.Agendamento;
 import br.edu.atitus.bompradev.scheduling.entidades.Disponibilidade;
 import br.edu.atitus.bompradev.scheduling.entidades.SituacaoAgendamento;
+import br.edu.atitus.bompradev.scheduling.entidades.SituacaoPagamento;
 import br.edu.atitus.bompradev.scheduling.repositorios.AgendamentoRepository;
 import br.edu.atitus.bompradev.scheduling.repositorios.DisponibilidadeRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -136,5 +137,82 @@ class AgendamentoServiceTest {
         var erro = assertThrows(ResponseStatusException.class, () -> agenda.decidir(providerId, id, false));
         assertEquals(HttpStatus.CONFLICT, erro.getStatusCode());
         assertEquals(SituacaoAgendamento.APROVADO, pedido.getSituacao());
+    }
+
+    private Agendamento agendamentoComValor(BigDecimal valor) {
+        return new Agendamento(servicoId, userId, providerId, data.atTime(9, 0).atZone(fuso).toInstant(),
+                data.atTime(10, 0).atZone(fuso).toInstant(), valor);
+    }
+
+    @Test
+    void clienteRegistraPagamentoSimuladoAposAprovacao() {
+        var id = UUID.randomUUID();
+        var pedido = agendamentoComValor(new BigDecimal("100.00"));
+        pedido.decidir(SituacaoAgendamento.APROVADO);
+        when(agendamentos.buscarParaDecisao(id)).thenReturn(Optional.of(pedido));
+
+        var resultado = agenda.pagar(userId, id);
+
+        assertEquals(SituacaoPagamento.PAGO, resultado.situacaoPagamento());
+        assertEquals(SituacaoAgendamento.APROVADO, resultado.situacao());
+        assertEquals(new BigDecimal("100.00"), resultado.valorContratado());
+    }
+
+    @Test
+    void naoPermitePagamentoAntesDaAprovacao() {
+        var id = UUID.randomUUID();
+        var pedido = agendamentoComValor(new BigDecimal("100.00"));
+        when(agendamentos.buscarParaDecisao(id)).thenReturn(Optional.of(pedido));
+
+        var erro = assertThrows(ResponseStatusException.class, () -> agenda.pagar(userId, id));
+        assertEquals(HttpStatus.CONFLICT, erro.getStatusCode());
+        assertEquals(SituacaoPagamento.NAO_REALIZADO, pedido.getSituacaoPagamento());
+    }
+
+    @Test
+    void outroUsuarioNaoPodePagarAgendamento() {
+        var id = UUID.randomUUID();
+        var pedido = agendamentoComValor(new BigDecimal("100.00"));
+        pedido.decidir(SituacaoAgendamento.APROVADO);
+        when(agendamentos.buscarParaDecisao(id)).thenReturn(Optional.of(pedido));
+
+        var erro = assertThrows(ResponseStatusException.class, () -> agenda.pagar(UUID.randomUUID(), id));
+        assertEquals(HttpStatus.FORBIDDEN, erro.getStatusCode());
+        assertEquals(SituacaoPagamento.NAO_REALIZADO, pedido.getSituacaoPagamento());
+    }
+
+    @Test
+    void naoRegistraMesmoPagamentoDuasVezes() {
+        var id = UUID.randomUUID();
+        var pedido = agendamentoComValor(new BigDecimal("100.00"));
+        pedido.decidir(SituacaoAgendamento.APROVADO);
+        pedido.registrarPagamento();
+        when(agendamentos.buscarParaDecisao(id)).thenReturn(Optional.of(pedido));
+
+        var erro = assertThrows(ResponseStatusException.class, () -> agenda.pagar(userId, id));
+        assertEquals(HttpStatus.CONFLICT, erro.getStatusCode());
+    }
+
+    @Test
+    void naoInventaValorDeAgendamentoAntigo() {
+        var id = UUID.randomUUID();
+        var pedido = agendamentoComValor(null);
+        pedido.decidir(SituacaoAgendamento.APROVADO);
+        when(agendamentos.buscarParaDecisao(id)).thenReturn(Optional.of(pedido));
+
+        var erro = assertThrows(ResponseStatusException.class, () -> agenda.pagar(userId, id));
+        assertEquals(HttpStatus.CONFLICT, erro.getStatusCode());
+        assertEquals(SituacaoPagamento.NAO_REALIZADO, pedido.getSituacaoPagamento());
+    }
+
+    @Test
+    void naoPermitePagamentoDeAgendamentoRecusado() {
+        var id = UUID.randomUUID();
+        var pedido = agendamentoComValor(new BigDecimal("100.00"));
+        pedido.decidir(SituacaoAgendamento.RECUSADO);
+        when(agendamentos.buscarParaDecisao(id)).thenReturn(Optional.of(pedido));
+
+        var erro = assertThrows(ResponseStatusException.class, () -> agenda.pagar(userId, id));
+        assertEquals(HttpStatus.CONFLICT, erro.getStatusCode());
     }
 }

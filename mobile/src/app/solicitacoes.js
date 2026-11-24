@@ -65,6 +65,8 @@ export default function Solicitacoes() {
           <Text>{formatarData(item.inicio)}</Text>
           <Text>{item.valorContratado == null ? 'Valor não registrado' : `Valor: R$ ${Number(item.valorContratado).toFixed(2).replace('.', ',')}`}</Text>
           <Text>{situacoes[item.situacao] ?? item.situacao}</Text>
+          {item.situacaoPagamento === 'PAGO' ? <Text>Pagamento simulado realizado</Text>
+            : item.situacao === 'APROVADO' ? <Text>Pagamento simulado não realizado</Text> : null}
           {item.situacao === 'PENDENTE' ? <View style={styles.acoes}>
             <Button mode="contained" onPress={() => responder(item.id, true)} disabled={respondendo !== null}>Aprovar</Button>
             <Button mode="outlined" onPress={() => responder(item.id, false)} disabled={respondendo !== null}>Recusar</Button>
