@@ -20,7 +20,7 @@ Para executar o projeto, consulte as orientações do [backend](backend/README.m
 - `PROVIDER`: cadastra e administra os próprios serviços dentro das regras da plataforma.
 - `ADMIN`: gerencia a operação, os conteúdos, as permissões e os recursos administrativos.
 
-# Módulos do produto
+  # Módulos do aplicativo 
 
 - **BOMPRADROP:** conteúdos curtos, notícias e dicas.
 - **BOMPRALAB:** tutoriais, guias e materiais técnicos.
