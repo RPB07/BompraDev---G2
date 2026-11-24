@@ -20,7 +20,7 @@ Para executar o projeto, consulte as orientações do [backend](backend/README.m
 - `PROVIDER`: cadastra e administra os próprios serviços dentro das regras da plataforma.
 - `ADMIN`: gerencia a operação, os conteúdos, as permissões e os recursos administrativos.
 
-  # Módulos do aplicativo 
+# Módulos do aplicativo 
 
 - **BOMPRADROP:** conteúdos curtos, notícias e dicas.
 - **BOMPRALAB:** tutoriais, guias e materiais técnicos.
@@ -28,7 +28,7 @@ Para executar o projeto, consulte as orientações do [backend](backend/README.m
 - **BOMPRAPRÊMIO:** itens promocionais e solicitações de resgate, sem pagamentos.
 - **Serviços:** catálogo de serviços publicados por providers e contratação por agendamento.
 
-# Estrutura do repositório 
+# Estrutura do repositório
 
 - `backend`: API Gateway e microsserviços Spring Boot.
 - `mobile`: aplicativo React Native com Expo.
