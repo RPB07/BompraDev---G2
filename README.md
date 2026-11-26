@@ -6,7 +6,7 @@ Vinicius Gehring Capellari RA 1138972
 # O projeto BompraDev
 
 BompraDev é uma plataforma mobile voltada a estudantes, profissionais e entusiastas de Computação e Tecnologia. Seu propósito é centralizar conteúdos relevantes, estimular o desenvolvimento de competências, promover a participação da comunidade e aproximar usuários de experiências e oportunidades relacionadas ao ecossistema tecnológico.
-O projeto propõe um ambiente digital organizado em quatro categorias funcionais, combinando informação, aprendizagem, experiências promocionais e participação comunitária.
+O projeto propõe um ambiente digital organizado em categorias de conteúdo e serviços, combinando informação, aprendizagem, experiências promocionais e participação comunitária.
 
 # Situação atual
 
@@ -16,9 +16,9 @@ Para executar o projeto, consulte as orientações do [backend](backend/README.m
 
 # Perfis previstos
 
-- `USER`: consulta conteúdos e serviços, participa de enquetes e acompanha suas interações.
-- `PROVIDER`: cadastra e administra os próprios serviços dentro das regras da plataforma.
-- `ADMIN`: gerencia a operação, os conteúdos, as permissões e os recursos administrativos.
+- `USER`: consulta conteúdos e serviços e acompanha seus agendamentos.
+- `PROVIDER`: cadastra e administra os próprios serviços e responde às solicitações de agendamento.
+- `ADMIN`: perfil previsto para gerenciar a operação, os conteúdos, as permissões e os recursos administrativos, ainda não implementados.
 
 # Módulos do aplicativo 
 
@@ -36,16 +36,17 @@ Para executar o projeto, consulte as orientações do [backend](backend/README.m
 
 # Segurança e privacidade
 
-Como avanços futuros, a arquitetura prevê autenticação protegida por tokens, senhas armazenadas com hash seguro, controle de acesso aplicado no backend.
-Proteção de sessões e credenciais no aplicativo, comunicação HTTPS em produção, validação de dados e arquivos enviados, registro de operações administrativas relevantes, minimização e proteção de dados pessoais conforme a LGPD.
+O projeto utiliza autenticação por tokens, senhas armazenadas com hash e controle de acesso no backend. Há validação dos dados e das imagens enviadas e proteção da sessão no aplicativo.
+
+Como avanços futuros, estão previstas a configuração de HTTPS em produção, a auditoria de operações administrativas e a revisão das medidas de proteção de dados pessoais conforme a LGPD.
 
 # Qualidade e testes
 
-Num primeiro momento, a qualidade foi validada por testes unitários realizados ao longo do processo de programação. Futuramente,  testes de integração, testes de API, testes de interface e testes de aceitação também podem ser incorporados ao projeto. 
+A qualidade foi verificada por testes unitários e por testes de API e integração realizados durante o desenvolvimento. Testes adicionais de interface e de aceitação podem ampliar essa validação.
 
 # Diretrizes de desenvolvimento
 
-O projeto adotou como princípios: separação de responsabilidades e arquitetura modular, código organizado, legível e reutilizável, validação de dados no frontend e backend, commits pequenos e descritivos, testes para funcionalidades críticas, versionamento e revisão de código. 
+O projeto adotou como princípios: separação de responsabilidades e arquitetura modular, código organizado, legível e reutilizável, validação de dados no frontend e backend, commits descritivos, testes para funcionalidades críticas, versionamento e revisão de código.
 
 # Desenvolvimentos futuros
 

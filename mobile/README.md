@@ -1,6 +1,6 @@
 # Aplicativo mobile
 
-Aplicativo do BompraDev desenvolvido com React Native, Expo SDK 58 e JavaScript. É possível testar acesso e perfil, consultar serviços e, como provider, publicar ou editar os próprios serviços. As seções BOMPRADROP, BOMPRALAB, BOMPRAVOZ e BOMPRAPRÊMIO exibem conteúdo local de demonstração, sem integração ao backend. A enquete não registra votos e os prêmios mostrados não correspondem a sorteios ou resgates ativos. Agendamentos ainda não foram implementados.
+Aplicativo do BompraDev desenvolvido com React Native, Expo SDK 58 e JavaScript. É possível testar acesso e perfil, consultar serviços e, como provider, publicar ou editar os próprios serviços. O cliente pode solicitar um horário, acompanhar o agendamento e registrar pagamento simulado após a aprovação; o prestador pode aprovar ou recusar solicitações. As seções BOMPRADROP, BOMPRALAB, BOMPRAVOZ e BOMPRAPRÊMIO exibem conteúdo local de demonstração, sem integração ao backend. A enquete não registra votos e os prêmios mostrados não correspondem a sorteios ou resgates ativos.
 
 ## Requisitos
 
@@ -36,5 +36,5 @@ npm.cmd run start
 
 A imagem `assets/marca-original.jpg` contém a arte de referência fornecida para o projeto. Os logotipos são apresentados nas telas a partir de partes dessa imagem, sem alterar o arquivo original.
 
-Inicie antes o backend conforme o respectivo README, incluindo o `catalog-service`. Com o Expo em execução, utilize o QR Code no Expo Go ou abra o emulador. Para uma visualização no navegador do computador, execute `npm.cmd run web`. A sessão é armazenada no SecureStore em dispositivos nativos e na sessão do navegador na versão web. As telas de acesso, campos reutilizáveis e estrutura de listagem e detalhes foram adaptados dos exemplos React Native do professor Augusto.
+Inicie antes o backend conforme o respectivo README, incluindo o `scheduling-service`. Com o Expo em execução, utilize o QR Code no Expo Go ou abra o emulador. Para visualizar no navegador do computador, execute `npx.cmd expo start --web --port 8088`: a porta 8081 pode estar ocupada pelo serviço de autenticação. A sessão é armazenada no SecureStore em dispositivos nativos e na sessão do navegador na versão web. As telas de acesso, campos reutilizáveis e estrutura de listagem e detalhes foram adaptados dos exemplos React Native do professor Augusto.
 
